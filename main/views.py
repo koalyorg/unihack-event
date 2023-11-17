@@ -4,6 +4,7 @@ from .forms import EventForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
+from kitchenrun.forms import EventPropertyForm
 
 def index(request):
     if request.user.is_authenticated:
@@ -30,10 +31,18 @@ def signup(request):
 def add_event(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
+        form_step_2 = EventPropertyForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
-            event.save()
+            event.save() # todo: only save event if everything is successful in the multistep form
+
+            # two step form if Kitchen Run
+            if event.event_type == 'KITCHENRUN':
+                request.session['event_id'] = event.id
+                return redirect('add_kitchenrun_property')
+
+            
             return redirect('view_index')  # Redirect to the event dashboard or other page
     else:
         form = EventForm()

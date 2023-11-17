@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Kitchen Run Courses</title>
+</head>
+<body>
+    <h1>Kitchen Run Courses</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for form in forms %}
+            {{ form.as_p }}  <!-- Display the form fields here -->
+        {% endfor %}
+        <button type="submit">Continue to add courses</button>
+    </form>
+</body>
+</html>

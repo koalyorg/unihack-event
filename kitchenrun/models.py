@@ -9,16 +9,18 @@ class EventProperty(models.Model):
 
     # attributes
     event = models.OneToOneField(Event, on_delete=models.CASCADE)
-    applications_start = models.DateTimeField()
-    applications_end = models.DateTimeField()
-    hasAppetizer = models.BooleanField(default=True)
-    hasMainCourse = models.BooleanField(default=True)
-    hasDessert = models.BooleanField(default=True)
-    start_time = models.TimeField()
+    #applications_start = models.DateTimeField()
+    #applications_end = models.DateTimeField()
+    #hasAppetizer = models.BooleanField(default=True)
+    #hasMainCourse = models.BooleanField(default=True)
+    #hasDessert = models.BooleanField(default=True)
+    #start_time = models.TimeField()
     length_courses = models.DurationField(default='1h')
     length_breaks = models.DurationField(default='30min')
-    public = models.BooleanField(default=False)
+    public = models.BooleanField(default=True)
     team_size = models.SmallIntegerField(default=3)
+    guests_per_course = models.SmallIntegerField(default=2)
+    course_number = models.SmallIntegerField(default=3)
 
 class Team(models.Model):
     event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
@@ -39,3 +41,13 @@ class Team(models.Model):
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+
+class Course(models.Model):
+    event_property = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    order = models.SmallIntegerField(default=0)
+class Pair(models.Model):
+    event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    is_cook = models.BooleanField(default=False)

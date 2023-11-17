@@ -35,8 +35,6 @@ class UserProperty(models.Model):
         max_length=10,
         choices=COUNTRIES,
         default='DEU')
-    
-
 
 
 class Event(models.Model):
