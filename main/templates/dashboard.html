@@ -6,6 +6,7 @@
     <!-- Add any additional CSS or JS here -->
 </head>
 <body>
+    <a href="/add">Add</a>
     <h1>Event Dashboard</h1>
     <div class="event-list">
         {% for event in events %}
@@ -19,7 +20,7 @@
                 <p>Location: {{ event.location }}</p>
                 <p>Organizer: {{ event.organizer }}</p>
                 <p>Participants: {{ event.participant_count }} / {{ event.max_participants }}</p>
-                <p>Status: {% if event.can_add_participant %}Open for Registration{% else %}Full{% endif %}</p>
+                <p>Status: {{ event.status }}</p>
                 <!-- Add more event details as needed -->
             </div>
         {% empty %}

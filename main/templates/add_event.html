@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Event</title>
+</head>
+<body>
+    <h1>Add New Event</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Display the form fields here -->
+        <button type="submit">Add Event</button>
+    </form>
+</body>
+</html>
