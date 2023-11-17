@@ -1,5 +1,7 @@
 from django.db import models
 
+import pycountry
+
 # Create your models here.
 
 from django.db import models
@@ -9,6 +11,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 
+
 @receiver(post_save, sender=User)
 def create_user_property(sender, instance, created, **kwargs):
     if created:
@@ -16,7 +19,24 @@ def create_user_property(sender, instance, created, **kwargs):
 
 
 class UserProperty(models.Model):
+
+    COUNTRIES = [None] * len(pycountry.countries)
+    i = 0
+    for country in list(pycountry.countries):
+        COUNTRIES[i] = (country.alpha_3, country.name)
+        i=i+1
+
+    # attributes
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    street = models.CharField(max_length=255, blank=True)
+    number = models.CharField(max_length=10, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    country = models.CharField(
+        max_length=10,
+        choices=COUNTRIES,
+        default='DEU')
+    
+
 
 
 class Event(models.Model):
