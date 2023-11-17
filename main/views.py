@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
 from .models import Event
 from .forms import EventForm
 from django.shortcuts import render, redirect
@@ -47,3 +48,31 @@ def add_event(request):
     else:
         form = EventForm()
     return render(request, 'add_event.html', {'form': form})
+
+
+@login_required
+def register_for_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if event.can_add_participant():
+        event.participants.add(request.user)
+        # Optionally, you can add a message or notification for the user
+    else:
+        # Handle the case where the event is full or the user can't be added
+        pass
+    return redirect('event_detail', event_id=event.id)
+
+@login_required
+def deregister_for_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if request.user in event.participants.all():
+        event.participants.remove(request.user)
+    else:
+        # Handle the case where the event is full or the user can't be added
+        pass
+    return redirect('event_detail', event_id=event.id)
+
+
+
+def event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    return render(request, 'event.html', {'event': event})

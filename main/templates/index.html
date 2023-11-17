@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventify - Discover Amazing Events</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Add modern web fonts and icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/yourkitcode.js" crossorigin="anonymous"></script>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     <header>
         <nav>
             <div class="logo">
@@ -52,5 +42,5 @@
         <p>&copy; 2023 Eventify. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
-</body>
-</html>
+{% endblock %}
+

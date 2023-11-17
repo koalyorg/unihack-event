@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ event.title }}</h1>
+    <p><strong>Type:</strong> {{ event.get_event_type_display }}</p>
+    <p><strong>Start Time:</strong> {{ event.start_time|date:"DATETIME_FORMAT" }}</p>
+    <p><strong>Duration:</strong> {{ event.duration }}</p>
+    <p><strong>Timezone:</strong> {{ event.timezone }}</p>
+    <p><strong>Description:</strong> {{ event.description }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Organizer:</strong> {{ event.organizer }}</p>
+    <p><strong>Participants:</strong> {{ event.participants.count }} / {{ event.max_participants }}</p>
+    <p><strong>Status:</strong> {{ event.status }}</p>
+
+    <!-- Registration Button (if applicable) -->
+    {% if request.user.is_authenticated and event.can_add_participant %}
+        {% if request.user in event.participants.all %}
+            <a href="{% url 'deregister_for_event' event.id %}">Deregeister for event</a>
+        {% else %}
+            <a href="{% url 'register_for_event' event.id %}">Register for event</a>
+        {% endif %}
+    {% elif event.can_add_participant %}
+       To register for the event <a href="/signup/">Signup</a> or <a href="/login/">Login</a>!
+
+    {% endif %}
+
+    <!-- List of Participants -->
+    {% if request.user == event.owner or request.user.is_staff %}
+
+    <h2>Participants (only visiable for owner)</h2>
+    <ul>
+        {% for participant in event.participants.all %}
+            <li>{{ participant.username }}</li>
+        {% empty %}
+            <li>No participants yet.</li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+{% endblock %}
+
