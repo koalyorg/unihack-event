@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Event</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+
     <h1>Add New Event</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}  <!-- Display the form fields here -->
         <button type="submit">Add Event</button>
     </form>
-</body>
-</html>
+{% endblock %}
+

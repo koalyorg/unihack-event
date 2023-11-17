@@ -1,31 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Event Dashboard</title>
-    <!-- Add any additional CSS or JS here -->
-</head>
-<body>
-    <a href="/add">Add</a>
-    <h1>Event Dashboard</h1>
-    <div class="event-list">
-        {% for event in events %}
-            <div class="event-card">
-                <h2>{{ event.title }}</h2>
-                <p>Type: {{ event.get_event_type_display }}</p>
-                <p>Start Time: {{ event.start_time|date:"DATETIME_FORMAT" }}</p>
-                <p>Duration: {{ event.duration }}</p>
-                <p>Timezone: {{ event.timezone }}</p>
-                <p>Description: {{ event.description }}</p>
-                <p>Location: {{ event.location }}</p>
-                <p>Organizer: {{ event.organizer }}</p>
-                <p>Participants: {{ event.participant_count }} / {{ event.max_participants }}</p>
-                <p>Status: {{ event.status }}</p>
-                <!-- Add more event details as needed -->
+{% extends "base.html" %}
+{% block content %}
+<h1>Event Dashboard</h1>
+<div class="event-list">
+    {% for event in events %}
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <!-- Placeholder for Event Image -->
+                <img src="path-to-event-image.jpg" class="img-fluid rounded-start" alt="Event Image">
             </div>
-        {% empty %}
-            <p>No events available.</p>
-        {% endfor %}
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <p class="card-text"><small class="text-muted">{{ event.get_event_type_display }}</small></p>
+                    <p class="card-text">{{ event.description|truncatewords:20 }}</p>
+                    <p class="card-text"><small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></p>
+                    <p class="card-text"><small class="text-muted">Ends: {{ event.end_time|date:"DATETIME_FORMAT"}}</small></p>
+                    <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small></p>
+                    <p class="card-text"><small class="text-muted">Organizer: {{ event.organizer }}</small></p>
+                    <p class="card-text"><small class="text-muted">Participants: {{ event.participant_count }}</small>
+                    </p>
+                    <p class="card-text"><small class="text-muted">Status: {{ event.status }}</small></p>
+                    {% if event.url %}
+                    <a href="{{ event.url }}" class="btn btn-primary">More Info</a>
+                    {% endif %}
+                    <p>{% if event.can_add_participant %}<a href="{% url 'register_for_event' event.id %}">Register for
+                        event</a>{% endif %}</p>
+
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+
+
+    {% empty %}
+    <p>No events available.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

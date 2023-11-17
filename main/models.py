@@ -94,10 +94,16 @@ class Event(models.Model):
     def participant_count(self):
         return self.participants.count()
 
-    def can_add_participant(self):
+    def participant_limit_reached(self):
         if self.max_participants is not None:
-            return self.participant_count < self.max_participants
-        return True
+            return not self.participant_count < self.max_participants
+        return False
+
+    def can_add_participant(self):
+        if not self.participant_limit_reached() and self.registration_open:
+            return True
+        else:
+            return False
 
     class Meta:
         ordering = ['start_time']
