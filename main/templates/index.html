@@ -3,40 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Platform</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <title>Eventify - Discover Amazing Events</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Add modern web fonts and icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/yourkitcode.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <nav>
-            <!-- Navigation bar with logo, links to pages like About, Contact, etc. -->
+            <div class="logo">
+                <h1>Eventify</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#events">Events</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
         </nav>
     </header>
-
-    <section id="hero">
-        <!-- Hero section with a large image or carousel, and a strong call-to-action -->
-    </section>
-
-    <section id="about">
-        <!-- About section to describe the platform -->
-    </section>
-
-    <section id="events">
-        <!-- Display upcoming events with links to more details -->
-    </section>
-
-    <section id="testimonials">
-        <!-- Testimonials or reviews from users -->
-    </section>
-
-    <section id="contact">
-        <!-- Contact form or contact information -->
-    </section>
-
+    <main>
+        <section id="hero">
+            <div class="hero-container">
+                <h2>Discover & Join Exciting Events Near You</h2>
+                <p>Find the best events, including the popular KitchenRun series!</p>
+                <a href="#events" class="btn-primary">Explore Events</a>
+            </div>
+        </section>
+        <section id="events">
+            <div class="container">
+                <h3>Featured Events</h3>
+                <div class="event">
+                    <h4>KitchenRun Challenge</h4>
+                    <p>Join our interactive cooking challenge. A perfect blend of fun, food, and competition!</p>
+                    <a href="#" class="btn-secondary">Learn More</a>
+                </div>
+                <!-- Additional events here -->
+            </div>
+        </section>
+        <section id="about">
+            <div class="container">
+                <h3>About Eventify</h3>
+                <p>Eventify is your go-to platform for finding and managing diverse events. From culinary battles to tech talks, we have it all!</p>
+            </div>
+        </section>
+    </main>
     <footer>
-        <!-- Footer with social media links, copyright information -->
+        <p>&copy; 2023 Eventify. All rights reserved.</p>
     </footer>
-
-    <script src="scripts.js"></script> <!-- Link to your JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>
