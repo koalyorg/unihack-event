@@ -46,17 +46,26 @@ def add_event(request):
 
             # Get coordinates (lat, lon) from location
             if not event.is_virtual:
-                api_url = "https://nominatim.openstreetmap.org/search"
-                api_query = {"q": event.location, "format": "jsonv2"}
-                api_response = requests.get(api_url, params=api_query)
-                if (api_response.json().len() == 0):
-                    is_input_valid = False # TODO: return to form with error message
+                api_url = "https://nominatim.openstreetmap.org/"
+                # get lan, lon
+                api_operator = "search"
+                api_query = {"q": event.location, "format": "jsonv2", "accept-language": "en"}
+                api_response = requests.get(api_url + api_operator, params=api_query)
+                # todo check repsonse
                 event.lat = Decimal(api_response.json()[0]['lat'])
                 event.lon = Decimal(api_response.json()[0]['lon'])
+                # get town
+                api_operator = "reverse"
+                api_query = {"lat": event.lat, "lon": event.lon, "format": "jsonv2", "accept-language": "en"}
+                api_response = requests.get(api_url + api_operator, params=api_query)
+                # todo check repsonse
+                print(api_response.content)
+                try:
+                    event.city = api_response.json()["address"]['city']
+                except:
+                    event.city = api_response.json()["address"]['town']
                 # Save form if inputs are valid
-                if (is_input_valid):
-                    event.save()
-                # todo add city to event!
+                event.save()
             else:
                 event.save()
 

@@ -72,6 +72,8 @@ class Event(models.Model):
     event_url = models.URLField(blank=True)
     lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
     lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    public = models.BooleanField(default=True)
+
 
 
     owner = models.ForeignKey(

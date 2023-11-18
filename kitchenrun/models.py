@@ -8,7 +8,6 @@ from main.models import Event,User
 # Create your models here.
 
 class EventProperty(models.Model):
-
     # attributes
     event = models.OneToOneField(Event, on_delete=models.CASCADE)
     #applications_start = models.DateTimeField()
@@ -17,9 +16,8 @@ class EventProperty(models.Model):
     #hasMainCourse = models.BooleanField(default=True)
     #hasDessert = models.BooleanField(default=True)
     #start_time = models.TimeField()
-    length_courses = models.DurationField(default='1h')
-    length_breaks = models.DurationField(default='30min')
-    public = models.BooleanField(default=True)
+    length_courses = models.DurationField(default='01:00:00')
+    length_breaks = models.DurationField(default='00:30:00')
     team_size = models.SmallIntegerField(default=3)
     guests_per_course = models.SmallIntegerField(default=2)
     course_number = models.SmallIntegerField(default=3)
