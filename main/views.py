@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from .models import Event
-from .forms import EventForm
+from .forms import EventForm, MessageForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
@@ -128,7 +128,16 @@ def deregister_for_event(request, event_id):
 
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render(request, 'event.html', {'event': event})
-
+    if request.method == 'POST':
+        user = request.user
+        if user.is_superuser or event.owner == user:
+            form = MessageForm(request.POST)
+            if form.is_valid():
+                message = form.save(commit=False)
+                message.event = event
+                message.owner = user
+                message.save()
+    form = MessageForm()
+    return render(request, 'event.html', {'event': event, 'form': form})
 def about(request):
     return render(request, 'about.html')

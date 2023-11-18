@@ -36,6 +36,7 @@ class UserProperty(models.Model):
         default='DEU')
 
 
+
 class Event(models.Model):
     EVENT_TYPES = [
         ('CONCERT', 'Concert'),
@@ -147,3 +148,10 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['start_time']
+
+
+class Message(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="messages")
+    time = models.DateTimeField(auto_now=True)
+    content = models.TextField(blank=True)

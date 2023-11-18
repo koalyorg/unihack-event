@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, UserProperty
+from .models import Event, UserProperty, Message
 
 # Register your models here.
 
@@ -14,3 +14,4 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(UserProperty)
+admin.site.register(Message)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event
+from .models import Event, Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -38,4 +38,7 @@ class EventForm(forms.ModelForm):
             'event_url': "Provide a URL to an external site for more information"
         }
 
-
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        exclude = ["owner", "event", "time"]
