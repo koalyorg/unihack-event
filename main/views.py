@@ -14,18 +14,13 @@ def index(request):
     if request.user.is_authenticated:
         query = request.GET.get('q', '')
         if query:
-            if query == "Virtual":
-                events = Event.objects.filter(Q(is_virtual=True)).order_by('start_time')
-            else:
-                events = Event.objects.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
+            events = Event.objects.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
         else:
             events = Event.objects.all().order_by('start_time')
         return render(request, 'dashboard.html', {'events': events})
     else:
         return render(request, 'index.html')
 
-def about(request):
-    return render(request, 'index.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -48,17 +43,21 @@ def add_event(request):
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
-            if not event.is_virtual:
-                try:
-                    api_url = "https://nominatim.openstreetmap.org/search"
-                    api_query = {"q": event.location, "format": "jsonv2"}
-                    api_response = requests.get(api_url, params=api_query)
-                    event.lat = Decimal(api_response.json()[0]['lat'])
-                    event.lon = Decimal(api_response.json()[0]['lon'])
-                except:
-                    pass
-                    # TODO: error handling
-                event.save() # todo: only save event if everything is successful in the multistep form
+
+            # Get coordinates (lat, lon) from location
+            api_url = "https://nominatim.openstreetmap.org/search"
+            api_query = {"q": event.location, "format": "jsonv2"}
+            api_response = requests.get(api_url, params=api_query)
+            if (api_response.json().len() == 0):
+                is_input_valid = False # TODO: return to form with error message
+            event.lat = Decimal(api_response.json()[0]['lat'])
+            event.lon = Decimal(api_response.json()[0]['lon'])
+
+            # Save form if inputs are valid
+            if (is_input_valid):
+                event.save()
+            else:
+                return # TODO: only save event if everything is successful in the multistep form
 
             # two step form if Kitchen Run
             if event.event_type == 'KITCHENRUN':
