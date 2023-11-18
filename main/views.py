@@ -41,15 +41,24 @@ def add_event(request):
         form = EventForm(request.POST)
         form_step_2 = EventPropertyForm(request.POST)
         if form.is_valid():
+            is_input_valid = True
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
+
+            # Get coordinates (lat, lon) from location
             api_url = "https://nominatim.openstreetmap.org/search"
             api_query = {"q": event.location, "format": "jsonv2"}
             api_response = requests.get(api_url, params=api_query)
+            if (api_response.json().len() == 0):
+                is_input_valid = False # TODO: return to form with error message
             event.lat = Decimal(api_response.json()[0]['lat'])
             event.lon = Decimal(api_response.json()[0]['lon'])
-            # TODO: error handling
-            event.save() # todo: only save event if everything is successful in the multistep form
+            
+            # Save form if inputs are valid
+            if (is_input_valid):
+                event.save()
+            else:
+                return # TODO: only save event if everything is successful in the multistep form
 
             # two step form if Kitchen Run
             if event.event_type == 'KITCHENRUN':
