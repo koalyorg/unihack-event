@@ -136,21 +136,22 @@ def pair_teams(request, event_id):
     results = bipartite.maximum_matching(B)
 
     # create pair obj out of results
-    teams_sorted = (list(), list(), list())
+    cooking_teams = (list(), list(), list())
     for team_id, course_id_str in results.items():
         if isinstance(team_id, int) and isinstance(course_id_str, str):
             parts = course_id_str.split("_")
             if len(parts) == 2 and parts[0].isdigit():
                 course_id = int(parts[0])
-                teams_sorted[course_id].append(Team.objects.get(id=team_id))
-                pair = Pair(
-                    event = event_property,
-                    course = course_id,
-                    team = Team.objects.get(id=team_id),
-                    is_cook = True)
-                pair.save()
+                cooking_teams[course_id].append(Team.objects.get(id=team_id))
+                #pair = Pair(
+                #    event = event_property,
+                #    course = course_id,
+                #    team = Team.objects.get(id=team_id),
+                #    is_cook = True)
+                #pair.save()
 
 
+    # pair guest teams to cooking teams for each course by rotating the teams of the other courses
     for course in Pair.COURSE_TYPES:
         #cooking_pair = Pair.objects.filter(team=team, is_cook=True).first()
         #course = cooking_pair.course
@@ -163,27 +164,19 @@ def pair_teams(request, event_id):
 
         if course_id == course_appetizer:
             for i in range(pairs_per_course):
-                team = teams_sorted[course_appetizer][i]
+                team = cooking_teams[course_appetizer][i]
                 pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
                 pair = Pair(
                     event = event_property,
                     course = course_id,
-                    team = teams_sorted[course_main][i], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
-                pair.save()
-
-                pair = Pair(
-                    event = event_property,
-                    course = course_id,
-                    team = teams_sorted[course_dessert][i], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
+                    cook = team,
+                    guest_1 = cooking_teams[course_main][i],
+                    guest_2 = cooking_teams[course_dessert][i])
                 pair.save()
         
         if course_id == course_main:  
             for i in range(pairs_per_course):
-                team = teams_sorted[course_main][i]
+                team = cooking_teams[course_main][i]
                 pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
@@ -201,22 +194,14 @@ def pair_teams(request, event_id):
                 pair = Pair(
                     event = event_property,
                     course = course_id,
-                    team = teams_sorted[course_appetizer][index1], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
-                pair.save()
-
-                pair = Pair(
-                    event = event_property,
-                    course = course_id,
-                    team = teams_sorted[course_dessert][index2], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
+                    cook = team,
+                    guest_1 = cooking_teams[course_appetizer][index1],
+                    guest_2 = cooking_teams[course_dessert][index2])
                 pair.save()
 
         if course_id == course_dessert:
             for i in range(pairs_per_course):
-                team = teams_sorted[course_dessert][i]
+                team = cooking_teams[course_dessert][i]
                 pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
@@ -234,28 +219,20 @@ def pair_teams(request, event_id):
                 pair = Pair(
                     event = event_property,
                     course = course_id,
-                    team = teams_sorted[course_appetizer][index1], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
+                    cook = team,
+                    guest_1 = cooking_teams[course_appetizer][index1],
+                    guest_2 = cooking_teams[course_main][index2])
                 pair.save()
 
-                pair = Pair(
-                    event = event_property,
-                    course = course_id,
-                    team = teams_sorted[course_main][index2], # todo: adjust
-                    is_cook = False,
-                    pair_id = pair_cook.pair_id)
-                pair.save()
+    #pairs = Pair.objects.filter(event=event_property)
 
-    pairs = Pair.objects.filter(event=event_property)
+    #w, h = len(teams), len(teams)
+    #Matrix = [[0 for x in range(w)] for y in range(h)] 
+    #works = True
+    #for pair1 in pairs:
+    #    for pair2 in pairs:
+    #        if  pair1 != pair2 and pair1.pair_id == pair2.pair_id:
+    #            Matrix[pair1.team.id-1][pair2.team.id-1] = Matrix[pair1.team.id-1][pair2.team.id-1] + 1
 
-    w, h = len(teams), len(teams)
-    Matrix = [[0 for x in range(w)] for y in range(h)] 
-    works = True
-    for pair1 in pairs:
-        for pair2 in pairs:
-            if  pair1 != pair2 and pair1.pair_id == pair2.pair_id:
-                Matrix[pair1.team.id-1][pair2.team.id-1] = Matrix[pair1.team.id-1][pair2.team.id-1] + 1
-
-    print(Matrix)
+    #print(Matrix)
     return render(request, 'pair_teams.html', {'result': results, 'courses': nodes_courses, 'teams':nodes_teams})

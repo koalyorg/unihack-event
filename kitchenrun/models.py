@@ -64,6 +64,7 @@ class Pair(models.Model):
         default=0,
     )
     #course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    is_cook = models.BooleanField(default=False)
-    pair_id = models.UUIDField(default=uuid.uuid4)
+    cook = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="cook_id")
+    guest_1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="guest_1_id")
+    guest_2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="guest_2_id")
+    #pair_id = models.UUIDField(default=uuid.uuid4)
