@@ -1,46 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>Eventify</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#events">Events</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="hero">
-            <div class="hero-container">
-                <h2>Discover & Join Exciting Events Near You</h2>
-                <p>Find the best events, including the popular KitchenRun series!</p>
-                <a href="#events" class="btn-primary">Explore Events</a>
-            </div>
-        </section>
-        <section id="events">
-            <div class="container">
-                <h3>Featured Events</h3>
-                <div class="event">
-                    <h4>KitchenRun Challenge</h4>
-                    <p>Join our interactive cooking challenge. A perfect blend of fun, food, and competition!</p>
-                    <a href="#" class="btn-secondary">Learn More</a>
-                </div>
-                <!-- Additional events here -->
-            </div>
-        </section>
-        <section id="about">
-            <div class="container">
-                <h3>About Eventify</h3>
-                <p>Eventify is your go-to platform for finding and managing diverse events. From culinary battles to tech talks, we have it all!</p>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2023 Eventify. All rights reserved.</p>
-    </footer>
-    <script src="script.js"></script>
+<div class="container my-5">
+
+    <div class="text-center mb-4">
+        <img src="/static/logo.png" alt="UnityEvents Logo" class="img-fluid" style="max-width: 200px;">
+    </div>
+
+    <h1 class="text-center mb-4">UnityEvents</h1>
+
+    <!-- Section: Global Migration Challenge -->
+    <section class="container mb-5">
+        <h2 class="mb-3">Challenges Posed by Global Migration</h2>
+        <p>The unprecedented levels of global migration, driven by climate change and active conflicts, are creating
+            significant social cohesion challenges. This situation necessitates the integration and mutual understanding
+            among diverse populations, which can be difficult due to cultural, linguistic, and generational
+            differences.</p>
+    </section>
+
+    <!-- Section: UnityEvents' Solution and Event-driven Platform -->
+    <section class="container mb-5">
+        <h2 class="mb-3">UnityEvents' Cultural and Generational Integration Programs</h2>
+        <p>UnityEvents addresses these challenges by organizing events that foster connections between different
+            cultures and generations. Their approach involves creating spaces where people from diverse backgrounds can
+            interact, share experiences, and learn from each other. These events are designed to promote mutual respect,
+            understanding, and cooperation, thereby facilitating the integration of migrants and enhancing the social
+            fabric of communities. By focusing on face-to-face interactions and authentic engagement, UnityEvents
+            combats the isolation and superficiality often associated with digital communication, creating a platform
+            for meaningful and lasting connections.</p>
+
+        <h2 class="mt-4 mb-3">Event-driven Platform</h2>
+        <p>Our platform focuses on events that serve a dual purpose: fostering connection and enacting positive change
+            in our communities. Through these carefully curated events, UnityEvents strives to build bridges across
+            cultural and generational divides, enabling individuals and groups to come together in a shared space of
+            understanding and mutual growth.</p>
+    </section>
+
+    <div class="mb-5">
+        <h2>Event Types</h2>
+        <div class="mb-3">
+            <h3>KitcheRun</h3>
+            <p>KitchenRun, a concept introduced by iswi e.V. in Germany, invites teams to prepare a course, switch
+                kitchens, meet others, and enjoy a diverse culinary experience. It's a delightful way to connect and
+                share cultures.</p>
+        </div>
+        <div class="mb-3">
+            <h3>Dialogue</h3>
+            <p>Our Dialogue sessions are about listening without the need to agree or disagree. It's a space for sharing
+                perspectives and fostering mutual respect.</p>
+        </div>
+        <div class="mb-3">
+            <h3>Lectures</h3>
+            <p>Engaging lectures by experts and thought leaders on topics ranging from social justice to environmental
+                stewardship, inspiring action and awareness.</p>
+        </div>
+        <div class="mb-3">
+            <h3>Workshops</h3>
+            <p>Interactive workshops that equip participants with new skills, from art and culture to technology, all
+                while building community connections.</p>
+        </div>
+        <div>
+            <h3>Trash Pickup</h3>
+            <p>Join our community clean-up events. A simple, effective way to care for our environment and strengthen
+                community bonds.</p>
+        </div>
+    </div>
+
+    <div>
+        <h2>Team behind UnityEvents</h2>
+        <p>Founded at the 5th Edition of the unihack hackathon in November 2023 in Timisoara, Romania, UnityEvents is a
+            testament to the power of collaboration and innovation in creating social impact.</p>
+    </div>
+</div>
+
 {% endblock %}
 

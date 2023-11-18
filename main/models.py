@@ -42,6 +42,8 @@ class Event(models.Model):
         ('CONCERT', 'Concert'),
         ('CONFERENCE', 'Conference'),
         ('WORKSHOP', 'Workshop'),
+        ('LECTURE', 'Lecture'),
+        ('DIALOGUE', 'Dialogue'),
         ('MEETUP', 'Meetup'),
         ('KITCHENRUN', 'Kitchenrun'),
         ('HACKATHON', 'Hackathon'),
