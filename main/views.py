@@ -14,8 +14,9 @@ def index(request):
     if request.user.is_authenticated:
         query = request.GET.get('q', '')
         print(query)
+        events = Event.objects.filter(Q(public=True) & Q(approved=True))
         if query:
-            events = Event.objects.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
+            events = events.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
         else:
             events = Event.objects.all().order_by('start_time')
         past = request.GET.get('past', '')
@@ -23,6 +24,9 @@ def index(request):
             pass
         else:
            events = [x for x in events if x.status_code <= 4]
+        own = request.GET.get('own', '')
+        if len(own) > 0:
+            events = Event.objects.all().filter(Q(owner=request.user)).order_by('start_time')
         return render(request, 'dashboard.html', {'events': events})
     else:
         return render(request, 'index.html')
@@ -42,10 +46,12 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
-def add_event(request):
+def add_event(request, event_id=None):
+    event = None
+    if event_id:
+        event = get_object_or_404(Event, id=event_id)
     if request.method == 'POST':
-        form = EventForm(request.POST)
-        form_step_2 = EventPropertyForm(request.POST)
+        form = EventForm(request.POST, instance=event)
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
@@ -82,9 +88,16 @@ def add_event(request):
 
             
             return redirect('view_index')  # Redirect to the event dashboard or other page
-    else:
-        form = EventForm()
+    form = EventForm(instance=event)
     return render(request, 'add_event.html', {'form': form})
+
+@login_required
+def delete_event(request, event_id):
+    user = request.user
+    event = get_object_or_404(Event, pk=event_id)
+    if user.is_superuser() or event.owner == user:
+        event.delete()
+
 
 def map_test(request):
     coordinates = [50.6829, 10.9377]

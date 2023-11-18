@@ -71,6 +71,8 @@ class Event(models.Model):
     lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
     lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
     public = models.BooleanField(default=True)
+    approved = models.BooleanField(default=True)
+
 
     owner = models.ForeignKey(
         User,
