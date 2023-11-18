@@ -1,3 +1,4 @@
+import pytz
 from django.db import models
 
 import pycountry
@@ -11,7 +12,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 
-
 @receiver(post_save, sender=User)
 def create_user_property(sender, instance, created, **kwargs):
     if created:
@@ -19,12 +19,11 @@ def create_user_property(sender, instance, created, **kwargs):
 
 
 class UserProperty(models.Model):
-
     COUNTRIES = [None] * len(pycountry.countries)
     i = 0
     for country in list(pycountry.countries):
         COUNTRIES[i] = (country.alpha_3, country.name)
-        i=i+1
+        i = i + 1
 
     # attributes
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -37,11 +36,14 @@ class UserProperty(models.Model):
         default='DEU')
 
 
+
 class Event(models.Model):
     EVENT_TYPES = [
         ('CONCERT', 'Concert'),
         ('CONFERENCE', 'Conference'),
         ('WORKSHOP', 'Workshop'),
+        ('LECTURE', 'Lecture'),
+        ('DIALOGUE', 'Dialogue'),
         ('MEETUP', 'Meetup'),
         ('KITCHENRUN', 'Kitchenrun'),
         ('HACKATHON', 'Hackathon'),
@@ -58,13 +60,20 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     duration = models.DurationField()  # stores a timedelta object
     registration_end = models.DateTimeField()
-    timezone = models.CharField(max_length=50)  # e.g., 'Europe/London'
+    timezone = models.CharField(max_length=50, choices=[(tz, tz) for tz in pytz.all_timezones])
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
     organizer = models.CharField(max_length=100, blank=True)
     max_participants = models.PositiveIntegerField(null=True, blank=True)
     is_virtual = models.BooleanField(default=False)
-    url = models.URLField(blank=True)
+    virtual_link = models.CharField(max_length=255, blank=True)
+    event_url = models.URLField(blank=True)
+    lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    public = models.BooleanField(default=True)
+    approved = models.BooleanField(default=True)
+
 
     owner = models.ForeignKey(
         User,
@@ -95,18 +104,32 @@ class Event(models.Model):
 
     @property
     def status(self):
-       if self.registration_open:
-           if self.can_add_participant():
-               return "Registration open"
-           else:
-               return "Full"
-       else:
-            if self.start_time > timezone.now():
-                return "Registration closed"
-            if self.start_time + self.duration < timezone.now():
-                return "Event finished"
+        status_code = self.status_code
+        if status_code == 1:
+            return "Registration open"
+        elif status_code == 2:
+            return "Full"
+        elif status_code == 3:
+            return "Registration closed"
+        elif status_code == 4:
+            return "Event running"
+        else:
+            return "Event finished"
+
+    @property
+    def status_code(self):
+        if self.registration_open:
+            if self.can_add_participant():
+                return 1
             else:
-                return "Event running"
+                return 2
+        else:
+            if self.start_time > timezone.now():
+                return 3
+            if self.start_time + self.duration < timezone.now():
+                return 5
+            else:
+                return 4
 
     @property
     def participant_count(self):
@@ -125,3 +148,10 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['start_time']
+
+
+class Message(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="messages")
+    time = models.DateTimeField(auto_now=True)
+    content = models.TextField(blank=True)

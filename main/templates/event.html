@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+{% load bootstrap5 %}
+
     <h1>{{ event.title }}</h1>
     <p><strong>Type:</strong> {{ event.get_event_type_display }}</p>
     <p><strong>Start Time:</strong> {{ event.start_time|date:"DATETIME_FORMAT" }}</p>
@@ -11,12 +13,21 @@
     <p><strong>Participants:</strong> {{ event.participants.count }} / {{ event.max_participants }}</p>
     <p><strong>Status:</strong> {{ event.status }}</p>
 
+    {% if event.event_type == 'KITCHENRUN' %}
+        <br>
+        {% include 'kitchenrun/event.html' %}
+        <br>
+    {% endif %}
+
+
+<p><strong>Messages:</strong> {% for message in event.messages.all %}<li><strong>{{message.owner}}:</strong> {{message.content}}</li>{% empty %}No messages{% endfor %}</p>
+
     <!-- Registration Button (if applicable) -->
     {% if request.user.is_authenticated and event.can_add_participant %}
         {% if request.user in event.participants.all %}
-            <a href="{% url 'deregister_for_event' event.id %}">Deregeister for event</a>
+            <a href="{% url 'deregister_for_event' event.id %}" class="btn btn-warning">Deregeister for event</a>
         {% else %}
-            <a href="{% url 'register_for_event' event.id %}">Register for event</a>
+            <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register for event</a>
         {% endif %}
     {% elif event.can_add_participant %}
        To register for the event <a href="/signup/">Signup</a> or <a href="/login/">Login</a>!
@@ -25,8 +36,9 @@
 
     <!-- List of Participants -->
     {% if request.user == event.owner or request.user.is_staff %}
-
-    <h2>Participants (only visiable for owner)</h2>
+    <br><br>
+    <h2>Admin Section</h2>
+    <h3>Participants</h3>
     <ul>
         {% for participant in event.participants.all %}
             <li>{{ participant.username }}</li>
@@ -34,6 +46,21 @@
             <li>No participants yet.</li>
         {% endfor %}
     </ul>
+
+    <h3>Actions</h3>
+    <a href="{% url 'event_edit' event.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'event_delete' event.id %}" class="btn btn-warning">Delete</a>
+    <br>
+    <br>
+    <h3>Message Participants</h3>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-warning">Send message</button>
+    </form>
+
+
+
 
     {% endif %}
 {% endblock %}

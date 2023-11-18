@@ -1,41 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Event Dashboard</h1>
+<br>
+<h1>UnityEvents Dashboard</h1>
+<br>
 <div class="event-list">
-    {% for event in events %}
-    <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <!-- Placeholder for Event Image -->
-                <img src="path-to-event-image.jpg" class="img-fluid rounded-start" alt="Event Image">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">{{ event.title }}</h5>
-                    <p class="card-text"><small class="text-muted">{{ event.get_event_type_display }}</small></p>
-                    <p class="card-text">{{ event.description|truncatewords:20 }}</p>
-                    <p class="card-text"><small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></p>
-                    <p class="card-text"><small class="text-muted">Ends: {{ event.end_time|date:"DATETIME_FORMAT"}}</small></p>
-                    <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small></p>
-                    <p class="card-text"><small class="text-muted">Organizer: {{ event.organizer }}</small></p>
-                    <p class="card-text"><small class="text-muted">Participants: {{ event.participant_count }}</small>
-                    </p>
-                    <p class="card-text"><small class="text-muted">Status: {{ event.status }}</small></p>
-                    {% if event.url %}
-                    <a href="{{ event.url }}" class="btn btn-primary">More Info</a>
-                    {% endif %}
-                    <p>{% if event.can_add_participant %}<a href="{% url 'register_for_event' event.id %}">Register for
-                        event</a>{% endif %}</p>
+  <div class="d-flex align-items-center mb-3">
+            <!-- City Buttons -->
+            <a href="?q=Timișoara" class="btn btn-primary me-2">Timișoara</a>
+            <a href="?q=Essen" class="btn btn-primary me-2">Essen</a>
+            <a href="?q=Ilmenau" class="btn btn-primary me-2">Ilmenau</a>
+            <a href="?q=Virtual" class="btn btn-secondary me-2">Virtual</a>
+            <a href="?past=true" class="btn btn-secondary me-2">All</a>
+            <a href="?own=true" class="btn btn-secondary me-2">Own</a>
 
+
+
+            <!-- Search Form -->
+            <form class="d-flex" method="get" action="">
+                <input type="text" name="q" class="form-control me-2" placeholder="Search city..." value="{{ request.GET.q }}">
+                <input type="submit" class="btn btn-outline-success" value="Search City">
+            </form>
+  </div>
+    <br>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for event in events %}
+<div class="d-flex flex-row justify-content-around"> <!-- Flex container for cards -->
+    <!-- Repeat this card structure for each event -->
+    <div class="card card-flex mb-3" style="max-width: 540px; min-width: 300px">
+        <div class="row g-0">
+            {% if event.image_url %}
+            <div class="col-md-4">
+                <img src="{{ event.image_url }}" class="img-fluid rounded-start" alt="Event Image">
+            </div>
+            {% endif %}
+            <div class="col-md">
+                <div class="card-body d-flex flex-column"> <!-- Flexbox layout -->
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <li class="list-group-item border-0"><i class="bi bi-tags"></i> <small class="text-muted">{{ event.get_event_type_display }}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-clock"></i> <small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-clock-history"></i> <small class="text-muted">Timezone: {{ event.timezone }}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-geo-alt"></i> <small class="text-muted">City: {{ event.city }}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-globe"></i> <small class="text-muted">{% if event.is_virtual %} Virtual Event {% else%} In-person {% endif %}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-person"></i> <small class="text-muted">Organizer: {{ event.organizer }}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }} {% if event.max_participants %}/ {{ event.max_participants }}{% endif %}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-exclamation-circle"></i> <small class="text-muted">Status: {{ event.status }}</small></li>
+                    <div class="mt-auto"> <!-- Buttons at the bottom -->
+                        {% if event.event_url %}
+                        <a href="{{ event.event_url }}" class="btn btn-primary">More Info</a>
+                        {% endif %}
+                        <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Show details</a>
+                        {% if event.can_add_participant %}
+                        <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register for Event</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- End of individual card -->
+</div>
 
     {% empty %}
     <p>No events available.</p>
     {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

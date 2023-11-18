@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Kitchen Run Event</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+{% load bootstrap5 %}
+<br>
     <h1>Kitchen Run Details</h1>
+<br>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Display the form fields here -->
-        <button type="submit">Continue to add courses</button>
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Continue to add courses</button>
     </form>
-</body>
-</html>
+{% endblock %}

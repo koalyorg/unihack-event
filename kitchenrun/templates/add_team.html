@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% load bootstrap5 %}
+<br>
+    <h1>Kitchen Run Team Signup</h1>
+<br>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Register as team</button>
+    </form>
+{% endblock %}

@@ -164,3 +164,6 @@ cython_debug/
 db.sqlite3
 .idea/
 migrations
+
+# api-key
+static/map/apikey.js

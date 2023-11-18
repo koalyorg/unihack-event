@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
+{% load bootstrap5 %}
 
+    <br>
+{% if form.instance.pk %}
+    <h1>Edit Event</h1>
+{% else %}
     <h1>Add New Event</h1>
+{% endif %}
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Display the form fields here -->
-        <button type="submit">Add Event</button>
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}
+    Edit Event
+{% else %}
+    Add Event
+{% endif %}</button>
     </form>
 {% endblock %}
 
