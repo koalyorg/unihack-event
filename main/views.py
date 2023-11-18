@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
@@ -41,6 +42,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            messages.success(request, "Welcome to UnityEvents!")
             return redirect('view_index')  # Redirect to a home page or another appropriate page
     else:
         form = SignUpForm()
@@ -55,7 +57,6 @@ def add_event(request, event_id=None):
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
-
             # Get coordinates (lat, lon) from location
             if not event.is_virtual:
                 api_url = "https://nominatim.openstreetmap.org/"
@@ -80,13 +81,14 @@ def add_event(request, event_id=None):
                 event.save()
             else:
                 event.save()
-
             # two step form if Kitchen Run
             if event.event_type == 'KITCHENRUN':
                 request.session['event_id'] = event.id
                 return redirect('add_kitchenrun_property')
-
-            
+            if event:
+                messages.success(request, "Event successfully updated.")
+            else:
+                messages.success(request, "Event successfully created.")
             return redirect('view_index')  # Redirect to the event dashboard or other page
     form = EventForm(instance=event)
     return render(request, 'add_event.html', {'form': form})
@@ -97,6 +99,7 @@ def delete_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if user.is_superuser or event.owner == user:
         event.delete()
+    messages.success(request, "Event successfully deleted.")
     return redirect('view_index')
 
 
@@ -109,6 +112,7 @@ def register_for_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if event.can_add_participant():
         event.participants.add(request.user)
+        messages.success(request, "Successfully registered")
         # Optionally, you can add a message or notification for the user
     else:
         # Handle the case where the event is full or the user can't be added
@@ -120,12 +124,11 @@ def deregister_for_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if request.user in event.participants.all():
         event.participants.remove(request.user)
+        messages.success(request, "Event successfully deregistered.")
     else:
         # Handle the case where the event is full or the user can't be added
         pass
     return redirect('event_detail', event_id=event.id)
-
-
 
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
@@ -138,7 +141,10 @@ def event(request, event_id):
                 message.event = event
                 message.owner = user
                 message.save()
+                messages.success(request, "Message successfully sent.")
     form = MessageForm()
     return render(request, 'event.html', {'event': event, 'form': form})
+
+
 def about(request):
     return render(request, 'about.html')
