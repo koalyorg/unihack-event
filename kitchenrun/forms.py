@@ -1,5 +1,5 @@
 from django import forms
-from .models import EventProperty, Course
+from .models import EventProperty
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -16,13 +16,13 @@ class EventPropertyForm(forms.ModelForm):
             'course_number': forms.NumberInput(),
             # Define other widgets as needed
         }
-
-class CourseForm(forms.ModelForm):
-    class Meta:
-        model = Course
-        exclude = ['event_property', 'order']
-        widgets = {
-            'name': forms.TextInput(),
-        }
+#
+# class CourseForm(forms.ModelForm):
+#     class Meta:
+#         model = Course
+#         exclude = ['event_property', 'order']
+#         widgets = {
+#             'name': forms.TextInput(),
+#         }
 
 

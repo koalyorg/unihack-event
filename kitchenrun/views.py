@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from kitchenrun.forms import EventPropertyForm, CourseForm
-from kitchenrun.models import EventProperty, Team, Course
+from kitchenrun.forms import EventPropertyForm
+from kitchenrun.models import EventProperty, Team
 from main.models import Event
 from networkx.algorithms import bipartite
 
@@ -61,7 +61,8 @@ def add_kitchenrun_property(request):
 
 def pair_teams(request, event_id):
     event_property = EventProperty.objects.get(id=event_id)
-    courses = Course.objects.filter(event_property=event_property)
+    courses = ("Starter", "Main", "Desert")
+    #courses = Course.objects.filter(event_property=event_property)
 
     teams = Team.objects.filter(event=event_property)
 

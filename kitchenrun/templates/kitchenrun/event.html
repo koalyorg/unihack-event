@@ -10,8 +10,8 @@
                 <strong>Team Size:</strong> {{ event.eventproperty.team_size }}<br>
                 <strong>Guests Per Course:</strong> {{ event.eventproperty.guests_per_course }}<br>
                 <strong>Number of Courses:</strong> {{ event.eventproperty.course_number }}<br>
-                <strong>Courses:</strong>
-            <ul>{% for course in event.eventproperty.course_set.all %}<li> {{course.name}}</li>{% endfor %}</ul>
+                <strong>Courses: Starter, Main dish, and Desert</strong>
+<!--            <ul>{% for course in event.eventproperty.course_set.all %}<li> {{course.name}}</li>{% endfor %}</ul>-->
             </p>
         </div>
     </div>
