@@ -95,8 +95,9 @@ def add_event(request, event_id=None):
 def delete_event(request, event_id):
     user = request.user
     event = get_object_or_404(Event, pk=event_id)
-    if user.is_superuser() or event.owner == user:
+    if user.is_superuser or event.owner == user:
         event.delete()
+    return redirect('view_index')
 
 
 def map_test(request):
