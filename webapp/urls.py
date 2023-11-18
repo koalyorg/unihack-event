@@ -22,6 +22,7 @@ from webapp import settings
 
 urlpatterns = [
     path('', include('main.urls')),
+    path('kitchenrun/', include('kitchenrun.urls')),
     path("admin/", admin.site.urls),
 
 ]

@@ -1,3 +1,4 @@
 django
 pycountry
 django-bootstrap-v5
+networkx[default]

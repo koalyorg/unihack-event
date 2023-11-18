@@ -35,8 +35,6 @@ class UserProperty(models.Model):
         max_length=10,
         choices=COUNTRIES,
         default='DEU')
-    
-
 
 
 class Event(models.Model):
@@ -70,6 +68,8 @@ class Event(models.Model):
     long = models.FloatField(verbose_name="Longitude", null=True)
     is_virtual = models.BooleanField(default=False)
     url = models.URLField(blank=True)
+    lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
 
     owner = models.ForeignKey(
         User,

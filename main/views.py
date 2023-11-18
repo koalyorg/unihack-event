@@ -6,6 +6,9 @@ from .forms import EventForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
+from kitchenrun.forms import EventPropertyForm
+from decimal import Decimal
+import requests
 
 def index(request):
     if request.user.is_authenticated:
@@ -36,10 +39,24 @@ def signup(request):
 def add_event(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
+        form_step_2 = EventPropertyForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
-            event.save()
+            api_url = "https://nominatim.openstreetmap.org/search"
+            api_query = {"q": event.location, "format": "jsonv2"}
+            api_response = requests.get(api_url, params=api_query)
+            event.lat = Decimal(api_response.json()[0]['lat'])
+            event.lon = Decimal(api_response.json()[0]['lon'])
+            # TODO: error handling
+            event.save() # todo: only save event if everything is successful in the multistep form
+
+            # two step form if Kitchen Run
+            if event.event_type == 'KITCHENRUN':
+                request.session['event_id'] = event.id
+                return redirect('add_kitchenrun_property')
+
+            
             return redirect('view_index')  # Redirect to the event dashboard or other page
     else:
         form = EventForm()
