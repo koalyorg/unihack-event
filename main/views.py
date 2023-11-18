@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
+
+from kitchenrun.models import Team
 from .models import Event
 from .forms import EventForm, MessageForm
 from django.shortcuts import render, redirect
@@ -126,6 +128,9 @@ def deregister_for_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if request.user in event.participants.all():
         event.participants.remove(request.user)
+        if event.event_type == "KITCHENRUN":
+            team = get_object_or_404(Team, user=request.user, event=event)
+            team.delete()
         messages.success(request, "Event successfully deregistered.")
     else:
         # Handle the case where the event is full or the user can't be added

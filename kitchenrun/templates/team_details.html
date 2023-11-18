@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+{% block content %}
+<br>
+    <h1>Teams Details for {{ team.name }} </h1>
+    Team member 1:  {{ team.team_member_1 }}
+    Team member 2:  {{ team.team_member_2 }}
+
+    {% if pair %}
+        {% for x in pair %}
+            {{ x }}
+        {% endfor %}
+    {% endif %}
+
+<br>
+
+{% endblock %}

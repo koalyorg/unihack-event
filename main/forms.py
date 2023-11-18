@@ -35,7 +35,9 @@ class EventForm(forms.ModelForm):
             'location': 'Provide a full address for in-person events, e.g. Piața Consiliul Europei 2D, Timișoara 300627, Romania or for online the used tool, e.g. zoom',
             'organizer': 'Name of the organizer / organisation',
             'virtual_link': "Provide e.g. a zoom link",
-            'event_url': "Provide a URL to an external site for more information"
+            'event_url': "Provide a URL to an external site for more information",
+            'max_participants': "Max. Participants or Teams"
+
         }
 
 class MessageForm(forms.ModelForm):

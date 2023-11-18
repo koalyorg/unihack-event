@@ -7,13 +7,25 @@
             <p class="card-text">
                 <strong>Length of Courses:</strong> {{ event.eventproperty.length_courses }}<br>
                 <strong>Length of Breaks:</strong> {{ event.eventproperty.length_breaks }}<br>
-                <strong>Team Size:</strong> {{ event.eventproperty.team_size }}<br>
-                <strong>Guests Per Course:</strong> {{ event.eventproperty.guests_per_course }}<br>
-                <strong>Number of Courses:</strong> {{ event.eventproperty.course_number }}<br>
-                <strong>Courses: Starter, Main dish, and Desert</strong>
-<!--            <ul>{% for course in event.eventproperty.course_set.all %}<li> {{course.name}}</li>{% endfor %}</ul>-->
+<!--                <strong>Team Size:</strong> {{ event.eventproperty.team_size }}<br>-->
+<!--                <strong>Guests Per Course:</strong> {{ event.eventproperty.guests_per_course }}<br>-->
+<!--                <strong>Number of Courses:</strong> {{ event.eventproperty.course_number }}<br>-->
+                <strong>Courses: Starter, Main dish, and Desert</strong><br>
+               Teams:  {% for team in event.team_set.all %} {{team.name}} {% endfor %}
             </p>
+            {% if request.user == event.owner or request.user.is_staff %}
+                 <a href="{% url 'kitchenrun_pair_teams' event.id %}" class="btn btn-warning">Pair (Admin)</a>
+            {% endif %}
+            {% if request.user in event.participants.all %}
+            <a href="{% url 'kitchenrun_team_details' event.id %}" class="btn btn-primary">Details</a>
+            {% endif %}
+
+
         </div>
     </div>
+
+
+
+
 </div>
 
