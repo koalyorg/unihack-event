@@ -56,6 +56,7 @@ def add_event(request):
                 # Save form if inputs are valid
                 if (is_input_valid):
                     event.save()
+                # todo add city to event!
             else:
                 event.save()
 
