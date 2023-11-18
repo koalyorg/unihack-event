@@ -161,9 +161,8 @@ def pair_teams(request, event_id):
         if course_id == course_appetizer:
             for i in range(pairs_per_course):
                 team = cooking_teams[course_appetizer][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
                 pair = Pair(
-                    event = event_property,
+                    event = event,
                     course = course_id,
                     cook = team,
                     guest_1 = cooking_teams[course_main][i],
@@ -173,7 +172,6 @@ def pair_teams(request, event_id):
         if course_id == course_main:  
             for i in range(pairs_per_course):
                 team = cooking_teams[course_main][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
                 if (i+1 < pairs_per_course):
@@ -188,7 +186,7 @@ def pair_teams(request, event_id):
                     index2 = i-pairs_per_course+2
 
                 pair = Pair(
-                    event = event_property,
+                    event = event,
                     course = course_id,
                     cook = team,
                     guest_1 = cooking_teams[course_appetizer][index1],
@@ -198,7 +196,6 @@ def pair_teams(request, event_id):
         if course_id == course_dessert:
             for i in range(pairs_per_course):
                 team = cooking_teams[course_dessert][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
                 if (i+1 < pairs_per_course):
@@ -213,7 +210,7 @@ def pair_teams(request, event_id):
                     index2 = i-pairs_per_course+2
 
                 pair = Pair(
-                    event = event_property,
+                    event = event,
                     course = course_id,
                     cook = team,
                     guest_1 = cooking_teams[course_appetizer][index1],
@@ -231,4 +228,6 @@ def pair_teams(request, event_id):
     #            Matrix[pair1.team.id-1][pair2.team.id-1] = Matrix[pair1.team.id-1][pair2.team.id-1] + 1
 
     #print(Matrix)
-    return render(request, 'pair_teams.html', {'result': results, 'courses': nodes_courses, 'teams':nodes_teams})
+    messages.success(request, "Teams were successfully paired.")
+
+    return redirect('event_detail', event_id=event_id)

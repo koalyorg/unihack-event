@@ -58,7 +58,7 @@ class Pair(models.Model):
         (1, 'Main Dish'),
         (2, 'Dessert'),
     ]
-    event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     course = models.SmallIntegerField(
         choices=COURSE_TYPES,
         default=0,
