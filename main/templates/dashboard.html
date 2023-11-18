@@ -65,7 +65,7 @@
                     <li class="list-group-item"><i class="bi bi-person"></i> <small class="text-muted">Organizer: {{ event.organizer }}</small></li>
                     {% endif %}
                     {% if event.participant_count %}
-                    <li class="list-group-item"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }}</small></li>
+                    <li class="list-group-item"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }} / {{ event.max_participants }}</small></li>
                     {% endif %}
                     {% if event.status %}
                     <li class="list-group-item"><i class="bi bi-exclamation-circle"></i> <small class="text-muted">Status: {{ event.status }}</small></li>
