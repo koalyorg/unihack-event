@@ -13,10 +13,16 @@ import requests
 def index(request):
     if request.user.is_authenticated:
         query = request.GET.get('q', '')
+        print(query)
         if query:
             events = Event.objects.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
         else:
             events = Event.objects.all().order_by('start_time')
+        past = request.GET.get('past', '')
+        if len(past) > 0:
+            pass
+        else:
+           events = [x for x in events if x.status_code <= 4]
         return render(request, 'dashboard.html', {'events': events})
     else:
         return render(request, 'index.html')
