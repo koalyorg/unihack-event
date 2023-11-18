@@ -50,7 +50,11 @@ def kitchenrun_signup(request, event_id):
 def kitchenrun_team_details(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     team =  get_object_or_404(Team, event=event, user=request.user)
-    pairing = Pair.objects.all().filter(team=team)
+    pairing1 = Pair.objects.all().filter(cook=team)
+    pairing2 = Pair.objects.all().filter(guest_1=team)
+    pairing3 = Pair.objects.all().filter(guest_2=team)
+    pairing = pairing1 | pairing2 | pairing3
+    pairing = pairing.order_by('course')
     return render(request, 'team_details.html', {"event": event, "team": team, "pair": pairing})
 
 

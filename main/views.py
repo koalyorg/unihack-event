@@ -66,9 +66,12 @@ def add_event(request, event_id=None):
                 api_operator = "search"
                 api_query = {"q": event.location, "format": "jsonv2", "accept-language": "en"}
                 api_response = requests.get(api_url + api_operator, params=api_query)
-                # todo check repsonse
-                event.lat = Decimal(api_response.json()[0]['lat'])
-                event.lon = Decimal(api_response.json()[0]['lon'])
+                try:
+                    event.lat = Decimal(api_response.json()[0]['lat'])
+                    event.lon = Decimal(api_response.json()[0]['lon'])
+                except:
+                    messages.error(request, "City was invalid")
+                    return redirect('add_event')
                 # get town
                 api_operator = "reverse"
                 api_query = {"lat": event.lat, "lon": event.lon, "format": "jsonv2", "accept-language": "en"}
@@ -107,7 +110,7 @@ def delete_event(request, event_id):
 
 def map_test(request):
     coordinates = [45.7499, 21.2071]
-    return render(request, 'map_test.html', {'dest': coordinates})
+    return render(request, 'map.html', {'dest': coordinates})
 
 @login_required
 def register_for_event(request, event_id):
@@ -150,7 +153,11 @@ def event(request, event_id):
                 message.save()
                 messages.success(request, "Message successfully sent.")
     form = MessageForm()
-    return render(request, 'event.html', {'event': event, 'form': form})
+
+    # get coordinates
+    coordinates = [float(event.lat), float(event.lon)]
+
+    return render(request, 'event.html', {'event': event, 'form': form, 'coordinates': coordinates})
 
 
 def about(request):
