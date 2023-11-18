@@ -65,6 +65,8 @@ class Event(models.Model):
     max_participants = models.PositiveIntegerField(null=True, blank=True)
     is_virtual = models.BooleanField(default=False)
     url = models.URLField(blank=True)
+    lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
 
     owner = models.ForeignKey(
         User,

@@ -14,7 +14,7 @@ class SignUpForm(UserCreationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        exclude = ['owner', 'participants']  # Excluding owner and participants
+        exclude = ['owner', 'participants', 'lat', 'lon']  # Excluding parts of event that aren't part of the form
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'registration_end': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
