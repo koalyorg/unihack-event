@@ -50,7 +50,12 @@
                         {% endif %}
                         <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Show details</a>
                         {% if event.can_add_participant %}
+                        {% if request.user in event.participants.all %}
+                            <a href="{% url 'deregister_for_event' event.id %}" class="btn btn-warning">Degister for Event</a>
+                        {% else%}
                         <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register for Event</a>
+
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>

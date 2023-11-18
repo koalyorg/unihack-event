@@ -53,7 +53,7 @@ def kitchenrun_team_details(request, event_id):
     pairing1 = Pair.objects.all().filter(cook=team)
     pairing2 = Pair.objects.all().filter(guest_1=team)
     pairing3 = Pair.objects.all().filter(guest_2=team)
-    pairing = pairing1 + pairing2 + pairing3
+    pairing = pairing1 | pairing2 | pairing3
     pairing = pairing.order_by('course')
     return render(request, 'team_details.html', {"event": event, "team": team, "pair": pairing})
 
