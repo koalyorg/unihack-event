@@ -111,6 +111,8 @@ def map_test(request):
 def register_for_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if event.can_add_participant():
+        if event.event_type == "KITCHENRUN":
+            return redirect('kitchenrun_signup', event_id=event_id)
         event.participants.add(request.user)
         messages.success(request, "Successfully registered")
         # Optionally, you can add a message or notification for the user

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from kitchenrun.forms import EventPropertyForm
+from kitchenrun.forms import EventPropertyForm, TeamForm
 from kitchenrun.models import EventProperty, Team
 from main.models import Event
 from networkx.algorithms import bipartite
@@ -28,6 +28,21 @@ def add_kitchenrun_property(request):
     else:
         form = EventPropertyForm(instance=event_property)
     return render(request, 'add_kitchenrun_property.html', {'form': form})
+
+def kitchenrun_signup(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        form = TeamForm(request.POST, instance=None)
+        if form.is_valid():
+            team = form.save(commit=False)
+            team.event = event
+            team.user = request.user
+            team.save()
+            messages.success(request, "Team successfully created.")
+            return redirect('event_detail', event_id=event.id)  # Redirect to the event dashboard or other page
+    else:
+        form = TeamForm(instance=None)
+    return render(request, 'add_team.html', {'form': form})
 
 # def add_kitchenrun_course(request):
 #     event_property = EventProperty.objects.get(id=request.session.get('event_property_id'))

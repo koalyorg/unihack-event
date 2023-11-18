@@ -24,7 +24,7 @@ class EventProperty(models.Model):
 
 
 class Team(models.Model):
-    event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, blank=True)
     street = models.CharField(max_length=255, blank=True)
