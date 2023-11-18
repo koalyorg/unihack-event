@@ -9,8 +9,8 @@ class EventPropertyForm(forms.ModelForm):
         model = EventProperty
         exclude = ['event']  # Excluding owner and participants
         widgets = {
-            'length_courses': forms.TimeInput(format='%H'),
-            'length_breaks': forms.TimeInput(format='%H'),
+            'length_courses': forms.TextInput(attrs={'placeholder': 'HH:MM:SS'}),
+            'length_breaks': forms.TextInput(attrs={'placeholder': 'HH:MM:SS'}),
             'team_size': forms.NumberInput(),
             'guest_per_course': forms.NumberInput(),
             'course_number': forms.NumberInput(),

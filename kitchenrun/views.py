@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, render
+from django.db.models import Q
+from django.shortcuts import redirect, render, get_object_or_404
 
 from kitchenrun.forms import EventPropertyForm, CourseForm
 from kitchenrun.models import EventProperty, Team, Course
@@ -11,11 +12,13 @@ import networkx as nx
 # Create your views here.
 
 def add_kitchenrun_property(request):
+    event = Event.objects.get(id = request.session.get('event_id'))
+    event_property = EventProperty.objects.get(event=event)
     if request.method == 'POST':
-        form = EventPropertyForm(request.POST)
+        form = EventPropertyForm(request.POST, instance=event_property)
         if form.is_valid():
             eventProperty = form.save(commit=False)
-            eventProperty.event = Event.objects.get(id = request.session.get('event_id'))
+            eventProperty.event = event
             eventProperty.save()
 
             request.session['number_of_courses'] = eventProperty.course_number
@@ -23,10 +26,17 @@ def add_kitchenrun_property(request):
 
             return redirect('add_kitchenrun_course')  # Redirect to the event dashboard or other page
     else:
-        form = EventPropertyForm()
+        form = EventPropertyForm(instance=event_property)
     return render(request, 'add_kitchenrun_property.html', {'form': form})
 
 def add_kitchenrun_course(request):
+    event_property = EventProperty.objects.get(id=request.session.get('event_property_id'))
+    print(event_property)
+    courses_exist = Course.objects.filter(Q(event_property=event_property)).exists()
+    if courses_exist:
+        # todo make editable courses
+        return redirect('view_index')
+
     if request.method == 'POST':
         forms = list()
         for i in range(request.session.get('number_of_courses')):
@@ -36,7 +46,7 @@ def add_kitchenrun_course(request):
         for i in range(len(forms)):
             if forms[i].is_valid():
                 course = forms[i].save(commit=False)
-                course.event_property = EventProperty.objects.get(id = request.session.get('event_property_id'))
+                course.event_property = event_property
                 course.order = i
                 course.save()
 

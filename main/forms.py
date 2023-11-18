@@ -18,14 +18,14 @@ class EventForm(forms.ModelForm):
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'registration_end': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'duration': forms.TimeInput(format='%H'),
+            'duration': forms.TextInput(attrs={'placeholder': 'HH:MM:SS'}),
             'description': forms.Textarea(attrs={'rows': 4}),
             # Define other widgets as needed
         }
         labels = {
             'start_time': 'Event Start Time',
             'registration_end': 'Registration Deadline',
-            'duration': "Duration in hours",
+            'duration': "Duration",
             'virtual_link': "Link for event (in case virtual)",
             'event_url': "External URL for Event",
             # Other labels
