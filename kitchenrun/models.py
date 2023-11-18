@@ -18,9 +18,10 @@ class EventProperty(models.Model):
     #start_time = models.TimeField()
     length_courses = models.DurationField(default='01:00:00')
     length_breaks = models.DurationField(default='00:30:00')
-    team_size = models.SmallIntegerField(default=3)
-    guests_per_course = models.SmallIntegerField(default=2)
-    course_number = models.SmallIntegerField(default=3)
+    #team_size = models.SmallIntegerField(default=3)
+    #guests_per_course = models.SmallIntegerField(default=2)
+    #course_number = models.SmallIntegerField(default=3)
+
 
 class Team(models.Model):
     event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
@@ -36,20 +37,22 @@ class Team(models.Model):
     is_kosher = models.BooleanField(default=False)
     allergies = models.TextField(blank=True)
     comments = models.TextField(blank=True)
+    team_member_1 = models.CharField(max_length=255)
+    team_member_2 = models.CharField(max_length=255)
 
 
-class TeamMember(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+# class TeamMember(models.Model):
+#     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=255)
 
-class Course(models.Model):
-    event_property = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    order = models.SmallIntegerField(default=0)
+# class Course(models.Model):
+#     event_property = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=255)
+#     order = models.SmallIntegerField(default=0)
 
 class Pair(models.Model):
     event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    #course = models.ForeignKey(Course, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     is_cook = models.BooleanField(default=False)
     pair_id = models.UUIDField(default=uuid.uuid4)
