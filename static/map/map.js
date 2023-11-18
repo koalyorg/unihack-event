@@ -18,14 +18,15 @@ function onLocationFound(e) {
     user_location = [e.latitude, e.longitude];
     if (first_tracking) {
         first_tracking = false;
-        calculateRoute(); // Not suitable for production (rate-limit, only car routes)
+        calculateRoute();
     }
-    setTimeout(trackLocation, 5000);
+    setTimeout(trackLocation, 5000); // alt.: setInterval()
 }
 map.on('locationfound', onLocationFound);
 map.locate({setView: true});
 
-// Routing
+// Routing with Graphhopper
+// 11/18/2013: Free version has 15,000 requests per day
 function calculateRoute() {
     if (!user_location) return; // Break if locating failed
     console.log("Routing...");
@@ -34,12 +35,13 @@ function calculateRoute() {
             L.latLng(user_location[0], user_location[1]),
             L.latLng(destination[0], destination[1])
         ],
-        routeWhileDragging: true,
-        // geocoder: L.Control.Geocoder.nominatim(),
+        router: L.Routing.graphHopper('9735d72e-95b7-48f0-a344-a193463a77cf', {
+            urlParameters: {vehicle: 'car'}
+        }),
+        autoRoute: false, // To prevent excessive use of ressources
         createMarker: function() { // Only show destination marker
             L.marker(destination).addTo(map);
             return null;
-        }
-    }).addTo(map);
-    //setTimeout(trackLocation, 10000); // (!) This routing server is strictly rate-limited.
+        },
+    }).addTo(map).route();
 }
