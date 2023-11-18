@@ -39,7 +39,7 @@
                     <li class="list-group-item border-0"><i class="bi bi-tags"></i> <small class="text-muted">{{ event.get_event_type_display }}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-clock"></i> <small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-clock-history"></i> <small class="text-muted">Timezone: {{ event.timezone }}</small></li>
-                    <li class="list-group-item border-0"><i class="bi bi-geo-alt"></i> <small class="text-muted">Location: {{ event.location }}</small></li>
+                    <li class="list-group-item border-0"><i class="bi bi-geo-alt"></i> <small class="text-muted">City: {{ event.city }}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-globe"></i> <small class="text-muted">{% if event.is_virtual %} Virtual Event {% else%} In-person {% endif %}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-person"></i> <small class="text-muted">Organizer: {{ event.organizer }}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }} {% if event.max_participants %}/ {{ event.max_participants }}{% endif %}</small></li>
