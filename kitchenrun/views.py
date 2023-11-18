@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
 from kitchenrun.forms import EventPropertyForm, TeamForm
-from kitchenrun.models import EventProperty, Team
+from kitchenrun.models import EventProperty, Team, Pair
 from main.models import Event
 from networkx.algorithms import bipartite
 
@@ -44,6 +45,13 @@ def kitchenrun_signup(request, event_id):
     else:
         form = TeamForm(instance=None)
     return render(request, 'add_team.html', {'form': form})
+
+@login_required
+def kitchenrun_team_details(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    team =  get_object_or_404(Team, event=event, user=request.user)
+    pairing = Pair.objects.all().filter(team=team)
+    return render(request, 'team_details.html', {"event": event, "team": team, "pair": pairing})
 
 
 # def add_kitchenrun_course(request):
