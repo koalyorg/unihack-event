@@ -2,6 +2,8 @@ from django.db import models
 
 from main.models import Event,User
 
+import uuid
+
 
 # Create your models here.
 
@@ -51,4 +53,4 @@ class Pair(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     is_cook = models.BooleanField(default=False)
-    pair_id = models.IntegerField()
+    pair_id = models.UUIDField(default=uuid.uuid4)
