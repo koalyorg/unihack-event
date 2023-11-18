@@ -97,3 +97,6 @@ def deregister_for_event(request, event_id):
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'event.html', {'event': event})
+
+def about(request, ):
+    return render(request, 'about.html')
