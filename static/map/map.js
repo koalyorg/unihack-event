@@ -35,7 +35,7 @@ function calculateRoute() {
             L.latLng(user_location[0], user_location[1]),
             L.latLng(destination[0], destination[1])
         ],
-        router: L.Routing.graphHopper('9735d72e-95b7-48f0-a344-a193463a77cf', {
+        router: L.Routing.graphHopper(apikey, {
             urlParameters: {vehicle: 'car'}
         }),
         autoRoute: false, // To prevent excessive use of ressources
