@@ -53,7 +53,16 @@ class Team(models.Model):
 #     order = models.SmallIntegerField(default=0)
 
 class Pair(models.Model):
+    COURSE_TYPES = [
+        (0, 'Appetizer'),
+        (1, 'Main Dish'),
+        (2, 'Dessert'),
+    ]
     event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
+    course = models.SmallIntegerField(
+        choices=COURSE_TYPES,
+        default=0,
+    )
     #course = models.ForeignKey(Course, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     is_cook = models.BooleanField(default=False)

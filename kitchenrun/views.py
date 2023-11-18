@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 
-from kitchenrun.forms import EventPropertyForm, CourseForm
-from kitchenrun.models import EventProperty, Team, Course, Pair
+from kitchenrun.forms import EventPropertyForm, TeamForm
+from kitchenrun.models import EventProperty, Team, Pair
 from main.models import Event
 from networkx.algorithms import bipartite
 
@@ -14,7 +14,7 @@ import networkx as nx
 
 def add_kitchenrun_property(request):
     event = Event.objects.get(id = request.session.get('event_id'))
-    event_property = EventProperty.objects.get(event=event)
+    event_property = EventProperty.objects.filter(event=event).first()
     if request.method == 'POST':
         form = EventPropertyForm(request.POST, instance=event_property)
         if form.is_valid():
@@ -24,7 +24,7 @@ def add_kitchenrun_property(request):
             messages.success(request, "Event successfully updated.")
             # request.session['number_of_courses'] = eventProperty.course_number
             # request.session['event_property_id'] = eventProperty.id
-            return redirect('event_detail', event=event)  # Redirect to the event dashboard or other page
+            return redirect('event_detail', event_id=event.id)  # Redirect to the event dashboard or other page
     else:
         form = EventPropertyForm(instance=event_property)
     return render(request, 'add_kitchenrun_property.html', {'form': form})
@@ -75,18 +75,19 @@ def kitchenrun_signup(request, event_id):
 #         return render(request, 'add_courses.html', {'forms': forms})
 
 def pair_teams(request, event_id):
-    event_property = EventProperty.objects.get(id=event_id)
+    event = Event.objects.get(id=event_id)
+    event_property = EventProperty.objects.filter(event=event).first()
     courses = ("Starter", "Main", "Desert")
     #courses = Course.objects.filter(event_property=event_property)
 
-    teams = Team.objects.filter(event=event_property)
+    teams = Team.objects.filter(event=event)
 
     #shuffled_teams = list(teams)
 
 
     # number of teams need to be dividable by the number of courses
-    assert len(teams) % event_property.course_number == 0
-    pairs_per_course = (int) (len(teams) / event_property.course_number)
+    assert len(teams) % 3 == 0
+    pairs_per_course = (int) (len(teams) / 3)
 
     # pair teams with courses -> use bipartite matching algorithm (allows to match by course preference later)
     B = nx.Graph()
@@ -98,9 +99,10 @@ def pair_teams(request, event_id):
 
     # add nodes of type courses
     nodes_courses = list()
-    for course in courses:
+    for course in Pair.COURSE_TYPES:
+        course_id = course[0]
         for i in range(pairs_per_course):
-            nodes_courses.append(str(course.id) + "_" + str(i))
+            nodes_courses.append(str(course_id) + "_" + str(i))
     random.shuffle(nodes_courses)
     B.add_nodes_from(nodes_courses, bipartite=1)
 
@@ -126,30 +128,32 @@ def pair_teams(request, event_id):
             parts = course_id_str.split("_")
             if len(parts) == 2 and parts[0].isdigit():
                 course_id = int(parts[0])
-                teams_sorted[course_id-4].append(Team.objects.get(id=team_id))
+                teams_sorted[course_id].append(Team.objects.get(id=team_id))
                 pair = Pair(
                     event = event_property,
-                    course = Course.objects.get(id=course_id),
+                    course = course_id,
                     team = Team.objects.get(id=team_id),
                     is_cook = True)
                 pair.save()
 
 
-    for course in courses:
+    for course in Pair.COURSE_TYPES:
         #cooking_pair = Pair.objects.filter(team=team, is_cook=True).first()
         #course = cooking_pair.course
+
+        course_id = course[0]
 
         course_appetizer = 0
         course_main = 1
         course_dessert = 2
 
-        if course.id == 4:
+        if course_id == course_appetizer:
             for i in range(pairs_per_course):
                 team = teams_sorted[course_appetizer][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course, team=team, is_cook=True).first()
+                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_main][i], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
@@ -157,16 +161,16 @@ def pair_teams(request, event_id):
 
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_dessert][i], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
                 pair.save()
         
-        if course.id == 5:  
+        if course_id == course_main:  
             for i in range(pairs_per_course):
                 team = teams_sorted[course_main][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course, team=team, is_cook=True).first()
+                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
                 if (i+1 < pairs_per_course):
@@ -182,7 +186,7 @@ def pair_teams(request, event_id):
 
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_appetizer][index1], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
@@ -190,16 +194,16 @@ def pair_teams(request, event_id):
 
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_dessert][index2], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
                 pair.save()
 
-        if course.id == 6:
+        if course_id == course_dessert:
             for i in range(pairs_per_course):
                 team = teams_sorted[course_dessert][i]
-                pair_cook = Pair.objects.filter(event=event_property, course=course, team=team, is_cook=True).first()
+                pair_cook = Pair.objects.filter(event=event_property, course=course_id, team=team, is_cook=True).first()
 
                 index1 = -1
                 if (i+1 < pairs_per_course):
@@ -215,7 +219,7 @@ def pair_teams(request, event_id):
 
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_appetizer][index1], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
@@ -223,7 +227,7 @@ def pair_teams(request, event_id):
 
                 pair = Pair(
                     event = event_property,
-                    course = course,
+                    course = course_id,
                     team = teams_sorted[course_main][index2], # todo: adjust
                     is_cook = False,
                     pair_id = pair_cook.pair_id)
