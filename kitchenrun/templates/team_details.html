@@ -3,12 +3,15 @@
 {% block content %}
 <br>
     <h1>Teams Details for {{ team.name }} </h1>
-    Team member 1:  {{ team.team_member_1 }}
-    Team member 2:  {{ team.team_member_2 }}
+    Team member 1:  {{ team.team_member_1 }} <br>
+    Team member 2:  {{ team.team_member_2 }} <br>
 
+    <br>
     {% if pair %}
-        {% for x in pair %}
-            {{ x }}
+        {% for p in pair %}
+            {{ p.get_course_display }} <br>
+            Cooking? {{ p.is_cook }} <br>
+            with {{ p.guest_1.name }} and {{ p.guest_2.name }} <br><br>
         {% endfor %}
     {% endif %}
 
