@@ -41,24 +41,24 @@ def add_event(request):
         form = EventForm(request.POST)
         form_step_2 = EventPropertyForm(request.POST)
         if form.is_valid():
-            is_input_valid = True
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
 
             # Get coordinates (lat, lon) from location
-            api_url = "https://nominatim.openstreetmap.org/search"
-            api_query = {"q": event.location, "format": "jsonv2"}
-            api_response = requests.get(api_url, params=api_query)
-            if (api_response.json().len() == 0):
-                is_input_valid = False # TODO: return to form with error message
-            event.lat = Decimal(api_response.json()[0]['lat'])
-            event.lon = Decimal(api_response.json()[0]['lon'])
-            
-            # Save form if inputs are valid
-            if (is_input_valid):
-                event.save()
+            if not event.is_virtual:
+                api_url = "https://nominatim.openstreetmap.org/search"
+                api_query = {"q": event.location, "format": "jsonv2"}
+                api_response = requests.get(api_url, params=api_query)
+                if (api_response.json().len() == 0):
+                    is_input_valid = False # TODO: return to form with error message
+                event.lat = Decimal(api_response.json()[0]['lat'])
+                event.lon = Decimal(api_response.json()[0]['lon'])
+                # Save form if inputs are valid
+                if (is_input_valid):
+                    event.save()
+                # todo add city to event!
             else:
-                return # TODO: only save event if everything is successful in the multistep form
+                event.save()
 
             # two step form if Kitchen Run
             if event.event_type == 'KITCHENRUN':
@@ -101,3 +101,6 @@ def deregister_for_event(request, event_id):
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'event.html', {'event': event})
+
+def about(request):
+    return render(request, 'about.html')

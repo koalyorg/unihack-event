@@ -1,3 +1,4 @@
+import pytz
 from django.db import models
 
 import pycountry
@@ -42,6 +43,8 @@ class Event(models.Model):
         ('CONCERT', 'Concert'),
         ('CONFERENCE', 'Conference'),
         ('WORKSHOP', 'Workshop'),
+        ('LECTURE', 'Lecture'),
+        ('DIALOGUE', 'Dialogue'),
         ('MEETUP', 'Meetup'),
         ('KITCHENRUN', 'Kitchenrun'),
         ('HACKATHON', 'Hackathon'),
@@ -58,18 +61,18 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     duration = models.DurationField()  # stores a timedelta object
     registration_end = models.DateTimeField()
-    timezone = models.CharField(max_length=50)  # e.g., 'Europe/London'
+    timezone = models.CharField(max_length=50, choices=[(tz, tz) for tz in pytz.all_timezones])
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=255, blank=True)
     organizer = models.CharField(max_length=100, blank=True)
     max_participants = models.PositiveIntegerField(null=True, blank=True)
-    lat = models.FloatField(verbose_name="Latitude", null=True)
-    long = models.FloatField(verbose_name="Longitude", null=True)
     is_virtual = models.BooleanField(default=False)
-    url = models.URLField(blank=True)
+    virtual_link = models.CharField(max_length=255, blank=True)
+    event_url = models.URLField(blank=True)
     lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
     lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+
 
     owner = models.ForeignKey(
         User,

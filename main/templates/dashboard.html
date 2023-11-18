@@ -1,48 +1,82 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Event Dashboard</h1>
+<br>
+<h1>UnityEvents Dashboard</h1>
+<br>
 <div class="event-list">
-    <a href="?q=Timisoara">Timisoara</a>
-    <a href="?q=Essen">Essen</a>
-    <a href="?q=Ilmenau">Ilenau</a>
-    <form method="get" action="">
-        <input type="text" name="q" placeholder="Search items..." value="{{ request.GET.q }}">
-        <input type="submit" value="Search City">
-    </form>
-    {% for event in events %}
-    <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <!-- Placeholder for Event Image -->
-                <img src="path-to-event-image.jpg" class="img-fluid rounded-start" alt="Event Image">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">{{ event.title }}</h5>
-                    <p class="card-text"><small class="text-muted">{{ event.get_event_type_display }}</small></p>
-                    <p class="card-text">{{ event.description|truncatewords:20 }}</p>
-                    <p class="card-text"><small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></p>
-                    <p class="card-text"><small class="text-muted">Ends: {{ event.end_time|date:"DATETIME_FORMAT"}}</small></p>
-                    <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small></p>
-                    <p class="card-text"><small class="text-muted">Organizer: {{ event.organizer }}</small></p>
-                    <p class="card-text"><small class="text-muted">Participants: {{ event.participant_count }}</small>
-                    </p>
-                    <p class="card-text"><small class="text-muted">Status: {{ event.status }}</small></p>
-                    {% if event.url %}
-                    <a href="{{ event.url }}" class="btn btn-primary">More Info</a>
-                    {% endif %}
-                    <p>{% if event.can_add_participant %}<a href="{% url 'register_for_event' event.id %}">Register for
-                        event</a>{% endif %}</p>
+  <div class="d-flex align-items-center mb-3">
+            <!-- City Buttons -->
+            <a href="?q=Timisoara" class="btn btn-primary me-2">Timisoara</a>
+            <a href="?q=Essen" class="btn btn-primary me-2">Essen</a>
+            <a href="?q=Ilmenau" class="btn btn-primary me-2">Ilmenau</a>
+            <a href="?q=Virtual" class="btn btn-secondary me-2">Virtual</a>
+            <a href="/" class="btn btn-secondary me-2">All</a>
 
-                </div>
+
+            <!-- Search Form -->
+            <form class="d-flex" method="get" action="">
+                <input type="text" name="q" class="form-control me-2" placeholder="Search city..." value="{{ request.GET.q }}">
+                <input type="submit" class="btn btn-outline-success" value="Search City">
+            </form>
+  </div>
+    <br>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for event in events %}
+    <div class="card mb-3" style="max-width: 540px; min-width: 300px">
+    <div class="row g-0">
+        {% if event.image_url %}
+        <div class="col-md-4">
+            <img src="{{ event.image_url }}" class="img-fluid rounded-start" alt="Event Image">
+        </div>
+        {% endif %}
+        <div class="col-md">
+            <div class="card-body">
+                {% if event.title %}
+                <h5 class="card-title">{{ event.title }}</h5>
+                {% endif %}
+                <ul class="list-group list-group-flush">
+                    {% if event.get_event_type_display %}
+                    <li class="list-group-item"><i class="bi bi-tags"></i> <small class="text-muted">{{ event.get_event_type_display }}</small></li>
+                    {% endif %}
+                    {% if event.description %}
+                    <li class="list-group-item"><i class="bi bi-card-text"></i> {{ event.description|truncatewords:20 }}</li>
+                    {% endif %}
+                    {% if event.start_time %}
+                    <li class="list-group-item"><i class="bi bi-clock"></i> <small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></li>
+                    {% endif %}
+                    {% if event.end_time %}
+                    <li class="list-group-item"><i class="bi bi-clock-fill"></i> <small class="text-muted">Ends: {{ event.end_time|date:"DATETIME_FORMAT"}}</small></li>
+                    {% endif %}
+                    {% if event.location %}
+                    <li class="list-group-item"><i class="bi bi-geo-alt"></i> <small class="text-muted">Location: {{ event.location }}</small></li>
+                    {% endif %}
+                    {% if event.organizer %}
+                    <li class="list-group-item"><i class="bi bi-person"></i> <small class="text-muted">Organizer: {{ event.organizer }}</small></li>
+                    {% endif %}
+                    {% if event.participant_count %}
+                    <li class="list-group-item"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }}</small></li>
+                    {% endif %}
+                    {% if event.status %}
+                    <li class="list-group-item"><i class="bi bi-exclamation-circle"></i> <small class="text-muted">Status: {{ event.status }}</small></li>
+                    {% endif %}
+                </ul>
+                {% if event.url %}
+                <a href="{{ event.url }}" class="btn btn-primary mt-2">More Info</a>
+                {% endif %}
+                <a href="{% url 'event_detail' event.id %}" class="btn btn-primary mt-2">Show details</a>
+                {% if event.can_add_participant %}
+                <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary mt-2">Register for Event</a>
+                {% endif %}
             </div>
         </div>
     </div>
+</div>
 
 
     {% empty %}
     <p>No events available.</p>
     {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
