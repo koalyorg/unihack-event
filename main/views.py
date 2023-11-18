@@ -72,7 +72,7 @@ def add_event(request):
     return render(request, 'add_event.html', {'form': form})
 
 def map_test(request):
-    coordinates = [50.6829, 10.9377]
+    coordinates = [45.7499, 21.2071]
     return render(request, 'map_test.html', {'dest': coordinates})
 
 @login_required
