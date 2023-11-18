@@ -9,8 +9,7 @@
     <br>
     {% if pair %}
         {% for p in pair %}
-            {{ p.get_course_display }} <br>
-            Cooking? {{ p.is_cook }} <br>
+            <strong>{{ p.get_course_display }}</strong> <br>
             with {{ p.guest_1.name }} and {{ p.guest_2.name }} <br><br>
         {% endfor %}
     {% endif %}
