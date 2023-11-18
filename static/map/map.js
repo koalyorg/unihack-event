@@ -26,7 +26,7 @@ function onLocationError(e) {
     setTimeout(trackLocation, 2000)
 }
 map.on('locationfound', onLocationFound);
-map.locate({setView: true});
+if (!disable_routing) { map.locate({setView: true}); }
 
 // Routing with Graphhopper
 // 11/18/2013: Free version has 15,000 requests per day

@@ -107,7 +107,7 @@ def delete_event(request, event_id):
 
 def map_test(request):
     coordinates = [45.7499, 21.2071]
-    return render(request, 'map_test.html', {'dest': coordinates})
+    return render(request, 'map.html', {'dest': coordinates})
 
 @login_required
 def register_for_event(request, event_id):
@@ -150,7 +150,11 @@ def event(request, event_id):
                 message.save()
                 messages.success(request, "Message successfully sent.")
     form = MessageForm()
-    return render(request, 'event.html', {'event': event, 'form': form})
+
+    # get coordinates
+    coordinates = [float(event.lat), float(event.lon)]
+
+    return render(request, 'event.html', {'event': event, 'form': form, 'coordinates': coordinates})
 
 
 def about(request):

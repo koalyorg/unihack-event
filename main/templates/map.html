@@ -16,7 +16,7 @@
 
     <!-- Map -->
     <div id="map"></div>
-    <script> var destination = {{dest}} </script>
+    <script> var destination = {{dest}}; var disable_routing = false; </script>
     <script src="{% static 'map/map.js' %}"></script>
 
 {% endblock %}
