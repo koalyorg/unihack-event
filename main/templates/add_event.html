@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% load bootstrap5 %}
+
 
     <h1>Add New Event</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Display the form fields here -->
+        {% bootstrap_form form %}
         <button type="submit">Add Event</button>
     </form>
 {% endblock %}

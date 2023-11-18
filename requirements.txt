@@ -1,0 +1,3 @@
+django
+pycountry
+django-bootstrap-v5

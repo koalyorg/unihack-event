@@ -2,6 +2,13 @@
 {% block content %}
 <h1>Event Dashboard</h1>
 <div class="event-list">
+    <a href="?q=Timisoara">Timisoara</a>
+    <a href="?q=Essen">Essen</a>
+    <a href="?q=Ilmenau">Ilenau</a>
+    <form method="get" action="">
+        <input type="text" name="q" placeholder="Search items..." value="{{ request.GET.q }}">
+        <input type="submit" value="Search City">
+    </form>
     {% for event in events %}
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">

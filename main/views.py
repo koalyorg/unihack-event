@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from .models import Event
 from .forms import EventForm
@@ -8,7 +9,11 @@ from .forms import SignUpForm
 
 def index(request):
     if request.user.is_authenticated:
-        events = Event.objects.all().order_by('start_time')  # Fetch events ordered by start time
+        query = request.GET.get('q', '')
+        if query:
+            events = Event.objects.filter(Q(city__icontains=query) | Q(is_virtual=True)).order_by('start_time')
+        else:
+            events = Event.objects.all().order_by('start_time')
         return render(request, 'dashboard.html', {'events': events})
     else:
         return render(request, 'index.html')

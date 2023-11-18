@@ -63,8 +63,11 @@ class Event(models.Model):
     timezone = models.CharField(max_length=50)  # e.g., 'Europe/London'
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
     organizer = models.CharField(max_length=100, blank=True)
     max_participants = models.PositiveIntegerField(null=True, blank=True)
+    lat = models.FloatField(verbose_name="Latitude", null=True)
+    long = models.FloatField(verbose_name="Longitude", null=True)
     is_virtual = models.BooleanField(default=False)
     url = models.URLField(blank=True)
 
