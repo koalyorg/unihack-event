@@ -22,7 +22,7 @@
     <br>
     <div style="display: flex; flex-wrap: wrap; gap: 20px;">
     {% for event in events %}
-    <div class="card mb-3" style="max-width: 540px; min-width: 300px">
+<div class="card mb-3" style="max-width: 540px; min-width: 300px">
     <div class="row g-0">
         {% if event.image_url %}
         <div class="col-md-4">
@@ -44,11 +44,20 @@
                     {% if event.start_time %}
                     <li class="list-group-item"><i class="bi bi-clock"></i> <small class="text-muted">Starts: {{ event.start_time|date:"DATETIME_FORMAT"}}</small></li>
                     {% endif %}
-                    {% if event.end_time %}
-                    <li class="list-group-item"><i class="bi bi-clock-fill"></i> <small class="text-muted">Ends: {{ event.end_time|date:"DATETIME_FORMAT"}}</small></li>
+<!--                    {% if event.duration %} needs custom filter -->
+<!--                    <li class="list-group-item"><i class="bi bi-clock-fill"></i> <small class="text-muted">Duration: {{ event.duration }}</small></li>-->
+<!--                    {% endif %}-->
+                    {% if event.timezone %}
+                    <li class="list-group-item"><i class="bi bi-clock-history"></i> <small class="text-muted">Timezone: {{ event.timezone }}</small></li>
                     {% endif %}
                     {% if event.location %}
                     <li class="list-group-item"><i class="bi bi-geo-alt"></i> <small class="text-muted">Location: {{ event.location }}</small></li>
+                    {% endif %}
+                    {% if event.is_virtual %}
+                    <li class="list-group-item"><i class="bi bi-globe"></i> <small class="text-muted">Virtual Event</small></li>
+                    {% endif %}
+                    {% if event.virtual_link %}
+                    <li class="list-group-item"><a href="{{ event.virtual_link }}" target="_blank">Join Virtual Event</a></li>
                     {% endif %}
                     {% if event.organizer %}
                     <li class="list-group-item"><i class="bi bi-person"></i> <small class="text-muted">Organizer: {{ event.organizer }}</small></li>
@@ -60,17 +69,20 @@
                     <li class="list-group-item"><i class="bi bi-exclamation-circle"></i> <small class="text-muted">Status: {{ event.status }}</small></li>
                     {% endif %}
                 </ul>
-                {% if event.url %}
-                <a href="{{ event.url }}" class="btn btn-primary mt-2">More Info</a>
-                {% endif %}
-                <a href="{% url 'event_detail' event.id %}" class="btn btn-primary mt-2">Show details</a>
-                {% if event.can_add_participant %}
-                <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary mt-2">Register for Event</a>
-                {% endif %}
+                <div> <!-- Add margin-top for spacing -->
+                    {% if event.event_url %}
+                    <a href="{{ event.event_url }}" class="btn btn-primary">More Info</a>
+                    {% endif %}
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Show details</a>
+                    {% if event.can_add_participant %}
+                    <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register for Event</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
     {% empty %}
