@@ -38,11 +38,13 @@ def kitchenrun_signup(request, event_id):
             team.event = event
             team.user = request.user
             team.save()
+            event.participants.add(request.user)
             messages.success(request, "Team successfully created.")
             return redirect('event_detail', event_id=event.id)  # Redirect to the event dashboard or other page
     else:
         form = TeamForm(instance=None)
     return render(request, 'add_team.html', {'form': form})
+
 
 # def add_kitchenrun_course(request):
 #     event_property = EventProperty.objects.get(id=request.session.get('event_property_id'))
