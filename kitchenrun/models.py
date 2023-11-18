@@ -46,6 +46,7 @@ class Course(models.Model):
     event_property = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     order = models.SmallIntegerField(default=0)
+
 class Pair(models.Model):
     event = models.ForeignKey(EventProperty, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

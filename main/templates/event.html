@@ -13,16 +13,18 @@
     <p><strong>Participants:</strong> {{ event.participants.count }} / {{ event.max_participants }}</p>
     <p><strong>Status:</strong> {{ event.status }}</p>
 
-    {% block eventspecific %}
-
-    {% endblock %}
+    {% if event.event_type == 'KITCHENRUN' %}
+        <br>
+        {% include 'kitchenrun/event.html' %}
+        <br>
+    {% endif %}
 
     <!-- Registration Button (if applicable) -->
     {% if request.user.is_authenticated and event.can_add_participant %}
         {% if request.user in event.participants.all %}
-            <a href="{% url 'deregister_for_event' event.id %}">Deregeister for event</a>
+            <a href="{% url 'deregister_for_event' event.id %}" class="btn btn-warning">Deregeister for event</a>
         {% else %}
-            <a href="{% url 'register_for_event' event.id %}">Register for event</a>
+            <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register for event</a>
         {% endif %}
     {% elif event.can_add_participant %}
        To register for the event <a href="/signup/">Signup</a> or <a href="/login/">Login</a>!
