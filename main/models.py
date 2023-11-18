@@ -66,8 +66,6 @@ class Event(models.Model):
     city = models.CharField(max_length=255, blank=True)
     organizer = models.CharField(max_length=100, blank=True)
     max_participants = models.PositiveIntegerField(null=True, blank=True)
-    lat = models.FloatField(verbose_name="Latitude", null=True)
-    long = models.FloatField(verbose_name="Longitude", null=True)
     is_virtual = models.BooleanField(default=False)
     url = models.URLField(blank=True)
     lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
