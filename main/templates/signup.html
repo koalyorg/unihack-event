@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% load boatstrap5 %}
+{% load bootstrap5 %}
 {% block content %}
+    <br>
     <h2>Sign Up</h2>
     <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <button type="submit">Sign up</button>
+        <button class="btn btn-primary" type="submit">Sign up</button>
     </form>
 {% endblock %}
