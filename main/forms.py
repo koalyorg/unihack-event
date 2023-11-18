@@ -22,5 +22,15 @@ class EventForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 4}),
             # Define other widgets as needed
         }
+        labels = {
+            'start_time': 'Event Start Time',
+            'registration_end': 'Registration Deadline',
+            'duration': "Duration in hours"
+            # Other labels
+        }
+        help_texts = {
+            'description': 'Describe the event in detail.',
+            # Other help texts
+        }
 
 

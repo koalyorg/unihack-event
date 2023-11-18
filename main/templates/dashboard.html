@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Event Dashboard</h1>
+<br>
+<h1>UnityEvents Dashboard</h1>
+<br>
 <div class="event-list">
   <div class="d-flex align-items-center mb-3">
             <!-- City Buttons -->
             <a href="?q=Timisoara" class="btn btn-primary me-2">Timisoara</a>
             <a href="?q=Essen" class="btn btn-primary me-2">Essen</a>
             <a href="?q=Ilmenau" class="btn btn-primary me-2">Ilmenau</a>
-            <a href="?q=Virtual" class="btn btn-primary me-2">Virtual</a>
+            <a href="?q=Virtual" class="btn btn-secondary me-2">Virtual</a>
+            <a href="/" class="btn btn-secondary me-2">All</a>
 
 
             <!-- Search Form -->
             <form class="d-flex" method="get" action="">
-                <input type="text" name="q" class="form-control me-2" placeholder="Search items..." value="{{ request.GET.q }}">
+                <input type="text" name="q" class="form-control me-2" placeholder="Search city..." value="{{ request.GET.q }}">
                 <input type="submit" class="btn btn-outline-success" value="Search City">
             </form>
   </div>
+    <br>
     {% for event in events %}
     <div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
