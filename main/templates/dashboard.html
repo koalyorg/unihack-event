@@ -20,15 +20,16 @@
             </form>
   </div>
     <br>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
     {% for event in events %}
-    <div class="card mb-3" style="max-width: 540px;">
+    <div class="card mb-3" style="max-width: 540px; min-width: 300px">
     <div class="row g-0">
         {% if event.image_url %}
         <div class="col-md-4">
             <img src="{{ event.image_url }}" class="img-fluid rounded-start" alt="Event Image">
         </div>
         {% endif %}
-        <div class="col-md-8">
+        <div class="col-md">
             <div class="card-body">
                 {% if event.title %}
                 <h5 class="card-title">{{ event.title }}</h5>
@@ -62,8 +63,9 @@
                 {% if event.url %}
                 <a href="{{ event.url }}" class="btn btn-primary mt-2">More Info</a>
                 {% endif %}
+                <a href="{% url 'event_detail' event.id %}" class="btn btn-primary mt-2">Show details</a>
                 {% if event.can_add_participant %}
-                <a href="{% url 'register_for_event' event.id %}" class="btn btn-secondary mt-2">Register for Event</a>
+                <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary mt-2">Register for Event</a>
                 {% endif %}
             </div>
         </div>
@@ -74,6 +76,7 @@
     {% empty %}
     <p>No events available.</p>
     {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
