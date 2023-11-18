@@ -129,7 +129,7 @@ def deregister_for_event(request, event_id):
     if request.user in event.participants.all():
         event.participants.remove(request.user)
         if event.event_type == "KITCHENRUN":
-            team = get_object_or_404(Team, user=request.user)
+            team = get_object_or_404(Team, user=request.user, event=event)
             team.delete()
         messages.success(request, "Event successfully deregistered.")
     else:
