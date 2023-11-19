@@ -33,6 +33,8 @@ class Team(models.Model):
     number = models.CharField(max_length=10)
     city = models.CharField(max_length=255)
     address_addition = models.CharField(max_length=255, blank=True)
+    lat = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
+    lon = models.DecimalField(default=-1, decimal_places=7, max_digits=10)
     is_vegan = models.BooleanField(default=False)
     is_vegetarian = models.BooleanField(default=False)
     is_halal = models.BooleanField(default=False)

@@ -21,7 +21,7 @@ class EventPropertyForm(forms.ModelForm):
 class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
-        exclude = ['event', 'user']  # Excluding owner and participants
+        exclude = ['event', 'user', 'lat', 'lon']  # Excluding owner and participants
         widgets = {
 
         }
