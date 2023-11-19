@@ -45,9 +45,6 @@
                     <li class="list-group-item border-0"><i class="bi bi-people"></i> <small class="text-muted">Participants: {{ event.participant_count }} {% if event.max_participants %}/ {{ event.max_participants }}{% endif %}</small></li>
                     <li class="list-group-item border-0"><i class="bi bi-exclamation-circle"></i> <small class="text-muted">Status: {{ event.status }}</small></li>
                     <div class="mt-auto"> <!-- Buttons at the bottom -->
-                        {% if event.event_url %}
-                        <a href="{{ event.event_url }}" class="btn btn-primary">More Info</a>
-                        {% endif %}
                         <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Show details</a>
                         {% if event.can_add_participant %}
                         {% if request.user in event.participants.all %}

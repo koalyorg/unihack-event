@@ -3,6 +3,7 @@ from .models import Event, Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
 
@@ -39,6 +40,8 @@ class EventForm(forms.ModelForm):
             'max_participants': "Max. Participants or Teams"
 
         }
+
+
 
 class MessageForm(forms.ModelForm):
     class Meta:
