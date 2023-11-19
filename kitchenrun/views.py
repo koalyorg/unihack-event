@@ -8,8 +8,10 @@ from kitchenrun.models import EventProperty, Team, Pair
 from main.models import Event
 from networkx.algorithms import bipartite
 
+import requests
 import random
 import networkx as nx
+from decimal import Decimal
 
 # Create your views here.
 
@@ -38,8 +40,23 @@ def kitchenrun_signup(request, event_id):
             team = form.save(commit=False)
             team.event = event
             team.user = request.user
-            team.save()
             event.participants.add(request.user)
+
+            api_url = "https://nominatim.openstreetmap.org/"
+            # get lan, lon
+            #location = "" + team.street + " " + team.number + ", " + team.city
+            api_operator = "search.php"
+            api_query = {"street": team.street + " " + team.number, "city": team.city, "format": "jsonv2", "accept-language": "en"}
+            api_response = requests.get(api_url + api_operator, params=api_query)
+            try:
+                json_rsp = api_response.json()
+                team.lat = Decimal(api_response.json()[0]['lat'])
+                team.lon = Decimal(api_response.json()[0]['lon'])
+            except:
+                messages.error(request, "Address was invalid")
+                return redirect('kitchenrun_signup', event_id = event.id)
+
+            team.save()
             messages.success(request, "Team successfully created.")
             return redirect('event_detail', event_id=event.id)  # Redirect to the event dashboard or other page
     else:

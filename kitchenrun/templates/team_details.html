@@ -4,9 +4,14 @@
 {% block content %}
 <br>
     <div class = ""></div>
+    {% if not pair %}
+    <div class="alert alert-primary" role="alert">
+        Thank you for signing up for the event. The Organizers will start the pairing of the teams soon. Afterwards you will be able to see your personal schedule for the event.
+    </div>
+    {% endif %}
     <div class = "container card your-team-box">
         <div class = "item dark your-team">
-            <h1>Your Team:<br>Team {{ team.name }}</h1>
+            <h1>Your Team:<br>{{ team.name }}</h1>
         </div>
         <div class = "item your-team">
             <p></p>
@@ -60,6 +65,7 @@
                 <p></p>
             </div>
         {% endfor %}
+            
     {% endif %}
 
     <script src="{% static 'map/apikey.js' %}"></script>
@@ -75,8 +81,7 @@
     <!-- Map -->
     <div id="map{{p.course}}"></div>
     <script> var disable_routing = true; var i = 0;</script>
-    <script> var destination[i] = [45.75143, 21.20822];</script>
-    <script> var markers[i] = [];</script>
+    <script> var destination = [{{ event.lat }}, {{ event.lon }}] ;</script>
     <script src="{% static 'map/map.js' %}"></script>
 
 {% endblock %}

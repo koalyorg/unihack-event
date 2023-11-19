@@ -11,7 +11,7 @@
 <!--                <strong>Guests Per Course:</strong> {{ event.eventproperty.guests_per_course }}<br>-->
 <!--                <strong>Number of Courses:</strong> {{ event.eventproperty.course_number }}<br>-->
                 <strong>Courses: Starter, Main dish, and Desert</strong><br>
-               Teams:  {% for team in event.team_set.all %} {{team.name}} {% endfor %}
+               Teams:  {% for team in event.team_set.all %} {% if not forloop.first %} | {% endif %} {{team.name}} {% endfor %}
             </p>
             {% if request.user == event.owner or request.user.is_staff %}
                 <a href="{% url 'kitchenrun_pair_teams' event.id %}" class="btn btn-warning {% if event.pair_set %} disabled{% endif %}">Pair (Admin)</a>
