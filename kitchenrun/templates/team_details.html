@@ -26,10 +26,10 @@
                     {% if p.cook == team %}
                         <p class="card-text warning small"><i class="bi bi-egg-fried"></i> <strong>You are cooking this course!</strong></p>
                         <p class="card-text alert small">
-                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan %}<i class="bi bi-leaf"></i> Vegan <br>{% endif %}
-                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian %}<i class="bi bi-carrot"></i> Vegetarian <br>{% endif %}
-                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal %}<i class="bi bi-moon-stars"></i> Halal <br>{% endif %}
-                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher %}<i class="bi bi-star"></i> Kosher <br>{% endif %}
+                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan %}<i class="bi "></i> Vegan <br>{% endif %}
+                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian %}<i class="bi "></i> Vegetarian <br>{% endif %}
+                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal %}<i class="bi "></i> Halal <br>{% endif %}
+                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher %}<i class="bi "></i> Kosher <br>{% endif %}
                              Allergies:
                             {% if p.guest_1.allergies != "" and p.guest_2.allergies != "" %}
                                 {{ p.guest_1.allergies }} | {{ p.guest_2.allergies }}
