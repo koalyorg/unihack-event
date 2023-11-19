@@ -167,3 +167,4 @@ migrations
 
 # api-key
 static/map/apikey.js
+.vscode/
