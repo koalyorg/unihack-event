@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 import pytz
+import requests
 from django.db import models
 
 import pycountry
@@ -90,6 +93,30 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.get_event_type_display()})"
+
+    def generate_geo(self):
+        api_url = "https://nominatim.openstreetmap.org/"
+        # get lan, lon
+        api_operator = "search"
+        api_query = {"q": self.location, "format": "jsonv2", "accept-language": "en"}
+        api_response = requests.get(api_url + api_operator, params=api_query)
+        try:
+            self.lat = Decimal(api_response.json()[0]['lat'])
+            self.lon = Decimal(api_response.json()[0]['lon'])
+        except:
+            raise Exception("Lat/Lon was invalid")
+        api_operator = "reverse"
+        api_query = {"lat": self.lat, "lon": self.lon, "format": "jsonv2", "accept-language": "en"}
+        api_response = requests.get(api_url + api_operator, params=api_query)
+        try:
+            self.city = api_response.json()["address"]['city']
+        except:
+            try:
+                self.city = api_response.json()["address"]['town']
+            except:
+                raise Exception("City was invalid")
+        if not (self.lat and self.lon and self.city):
+            raise Exception("Missing attribute")
 
     @property
     def end_time(self):
