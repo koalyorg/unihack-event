@@ -1,39 +1,76 @@
 {% extends "base.html" %}
 {% load bootstrap5 %}
+{% load static %}
 {% block content %}
 <br>
-    <h1>Teams Details for {{ team.name }} </h1>
-    Team member 1:  {{ team.team_member_1 }} <br>
-    Team member 2:  {{ team.team_member_2 }} <br>
+    <div class = ""></div>
+    <div class = "container card your-team-box">
+        <div class = "item dark your-team">
+            <h1>Your Team:<br>Team {{ team.name }}</h1>
+        </div>
+        <div class = "item your-team">
+            <p>{{ team.team_member_1 }}, {{ team.team_member_2 }}</p>
+        </div>
+    </div>
 
-    <br>
     {% if pair %}
         {% for p in pair %}
-            <strong>{{ p.get_course_display }}</strong> <br>
-            {% if p.cook == team %}
-                <strong style="color: red">You are cooking this {{ p.get_course_display }} course!</strong><br>
-            {% endif %}
-            Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }} <br>
-                    {{ p.cook.address_addition }}
-            <br>
-            with Team {{ p.guest_1.id }}: {{ p.guest_1.name }}
-            <br>
-            E-Mail: {{ p.guest_1.user.email }}
-            <br>
-            and Team {{ p.guest_2.id }}:    {{ p.guest_2.name }}
-            <br>
-            E-Mail: {{ p.guest_2.user.email }}
-           <br>
-            {% if p.cook == team %}
-            <i style="color: orange">
-            Allergies<br>
-            Vegan: {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan%}<strong>True</strong>{% else %}False{% endif %},
-            Vegatarian: {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian%}<strong>True</strong>{% else %}False{% endif %},
-            Halal: {% if  p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal%}<strong>True</strong>{% else %}False{% endif %},
-            Kosher: {% if  p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher%}<strong>True</strong>{% else %}False{% endif %}
-            {% endif %}
-            </i>
-            <br>
+            <div class = "container card course">
+                <div class = "item">
+                    <h1 class = "">{{ p.get_course_display }}</h1>
+                    {% if p.cook == team %}
+                        <p class="warning small">You are cooking this course!</p>
+                        <p class = "alert small">
+                            (Allergies: None,
+                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan%}Vegan{% endif %}
+                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian%}Vegetarian{% endif %}
+                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal%}Halal{% endif %}
+                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher%}Kosher{% endif %})
+                        </p>
+                    {% endif %}
+                </div>
+                <div class = "item">
+                    <p>Guests:</p>
+                </div>
+                <div class = "item">
+                    <div class = "container card1">
+                        <div class = "item dark1">
+                            <h1>Team {{ p.guest_1.name }}</h1>
+                        </div>
+                        <div class = "item">
+                            <p>{{ p.guest_1.user.email }}</p>
+                        </div>
+                    </div>
+                    <div class = "container card1">
+                        <div class = "item dark1">
+                            <h1>Team {{ p.guest_2.name }}</h1>
+                        </div>
+                        <div class = "item">
+                            <p>{{ p.guest_2.user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class = "item">
+                    <p>Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }}<br>{{ p.cook.address_addition }}</p>
+                </div>
+            
+                <script src="{% static 'map/apikey.js' %}"></script>
+                <!-- Leaflet -->
+                <link rel="stylesheet" href="{% static 'map/leaflet/leaflet.css' %}"/>
+                <script src="{% static 'map/leaflet/leaflet.js' %}"></script>
+                <link rel="stylesheet" href="{% static 'map/map.css' %}"/>
+                <!-- Leaflet Routing Machine -->
+                <link rel="stylesheet" href="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.css' %}"/>
+                <script src="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
+                <script src="{% static 'map/lrm-graphhopper.js' %}"></script>
+    
+                <!-- Map -->
+                <div id="map"></div>
+                <script> var destination = [45.75143, 21.20822]; var disable_routing = true; </script>
+                <script src="{% static 'map/map.js' %}"></script>
+
+                <p></p>
+            </div>
         {% endfor %}
     {% endif %}
 
