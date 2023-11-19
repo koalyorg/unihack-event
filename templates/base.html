@@ -14,8 +14,19 @@
     <style>
         .navbar-nav .nav-link i {
             font-size: 1.75em; /* Adjust size */
-            color: #333; /* Adjust color */
+            color: #333;
         }
+
+        br.responsive {
+            display: inline;
+        }
+
+        @media (min-width: 600px) {
+            br.responsive {
+                display: none;
+            }
+        }
+
 
     </style>
     <!--link rel="stylesheet" href="{% static 'style.css' %}"-->
@@ -32,31 +43,42 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/"><i class="bi bi-house-door"></i></a>
+                    <a class="nav-link" aria-current="page" href="/">
+                        <i class="bi bi-house-door"></i>
+                        <span class="d-inline d-lg-none">Dashboard</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add/"><i class="bi bi-plus-circle"></i></a>
+                    <a class="nav-link" href="/add/">
+                        <i class="bi bi-plus-circle"></i>
+                        <span class="d-inline d-lg-none">Add</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout/"><i class="bi bi-box-arrow-right"></i></a>
+                    <a class="nav-link" href="/logout/">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="d-inline d-lg-none">Logout</span>
+                    </a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/login/"><i class="bi bi-box-arrow-in-right"></i></a>
+                    <a class="nav-link" href="/login/">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span class="d-inline d-lg-none">Login</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/signup/"><i class="bi bi-person-plus"></i></a>
+                    <a class="nav-link" href="/signup/">
+                        <i class="bi bi-person-plus"></i>
+                        <span class="d-inline d-lg-none">Signup</span>
+                    </a>
                 </li>
                 {% endif %}
-
-                <!--                <li class="nav-item">-->
-                <!--                    <a class="nav-link" href="/about/">About</a>-->
-                <!--                </li>-->
             </ul>
         </div>
+    </div>
     </div>
 </nav>
 <!-- TODO Accessibility -->
