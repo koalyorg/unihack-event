@@ -72,7 +72,14 @@ def kitchenrun_team_details(request, event_id):
     pairing3 = Pair.objects.all().filter(guest_2=team)
     pairing = pairing1 | pairing2 | pairing3
     pairing = pairing.order_by('course')
-    return render(request, 'team_details.html', {"event": event, "team": team, "pair": pairing})
+
+    course_length = event_property.length_courses
+    break_length = event_property.length_breaks
+    appetizer_time = event.start_time
+    main_time = appetizer_time + course_length + break_length
+    desert_time = main_time + course_length + break_length
+
+    return render(request, 'team_details.html', {"event": event, "team": team, "pair": pairing, "appetizer_time": appetizer_time, "main_time": main_time, "dessert_time": desert_time, "course_length": course_length})
 
 
 # def add_kitchenrun_course(request):

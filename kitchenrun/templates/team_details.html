@@ -22,7 +22,14 @@
         <div class="col-md-4 d-flex align-items-stretch"> <!-- Added flex utilities -->
             <div class="card course mb-3 w-100"> <!-- Added w-100 for full width -->
                 <div class="card-body d-flex flex-column"> <!-- Flex column for internal spacing -->
-                    <h5 class="card-title">{{ p.get_course_display }}</h5>
+                    <h5 class="card-title">{{ p.get_course_display }} | 
+                        {% if p.course == 0 %} 
+                            {{ appetizer_time|date:"TIME_FORMAT" }}
+                        {% elif p.course == 1  %}
+                            {{ main_time|date:"TIME_FORMAT" }}
+                        {% elif p.course == 2  %}
+                            {{ dessert_time|date:"TIME_FORMAT" }}
+                        {% endif %}</h5>
                     {% if p.cook == team %}
                         <p class="card-text warning small"><i class="bi bi-egg-fried"></i> <strong>You are cooking this course!</strong></p>
                         <p class="card-text alert small">
