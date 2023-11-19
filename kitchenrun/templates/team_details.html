@@ -11,76 +11,80 @@
     {% endif %}
     <div class = "container card your-team-box mb-3">
         <div class = "card-body">
-            <h5 class="card-title">Your Team: {{ team.name }}</h1>
+            <h5>Your Team: {{ team.name }}</h5>
             <p class="card-text">Members: {{ team.team_member_1 }}, {{ team.team_member_2 }}</p>
         </div>
     </div>
 
-    {% if pair %}
-        {% for p in pair %}
-            <div class = "container card course mb-3">
-                <div class = "card-body">
+  {% if pair %}
+    <div class="row g-3"> <!-- Added g-3 class for spacing -->
+    {% for p in pair %}
+        <div class="col-md-4 d-flex align-items-stretch"> <!-- Added flex utilities -->
+            <div class="card course mb-3 w-100"> <!-- Added w-100 for full width -->
+                <div class="card-body d-flex flex-column"> <!-- Flex column for internal spacing -->
                     <h5 class="card-title">{{ p.get_course_display }}</h5>
                     {% if p.cook == team %}
-                        <p class="card-text warning small"><strong>You are cooking this course!</strong></p>
-                        <p class = "card-text alert small">
+                        <p class="card-text warning small"><i class="bi bi-egg-fried"></i> <strong>You are cooking this course!</strong></p>
+                        <p class="card-text alert small">
                             (
-                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan%}Vegan -{% endif %}
-                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian%}Vegetarian -{% endif %}
-                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal%}Halal -{% endif %}
-                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher%}Kosher -{% endif %}
-                            Allergies: {% if p.guest_1.allergies != "" and p.guest_2.allergies != "" %} {{p.guest_1.allergies}} | {{ p.guest_2.allergies }} {% else %} {{p.guest_1.allergies}}{{ p.guest_2.allergies }} {% endif %} | ) <!-- TODO: Allergies-->
+                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan %}<i class="bi bi-leaf"></i> Vegan -{% endif %}
+                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian %}<i class="bi bi-carrot"></i> Vegetarian -{% endif %}
+                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal %}<i class="bi bi-moon-stars"></i> Halal -{% endif %}
+                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher %}<i class="bi bi-star"></i> Kosher -{% endif %}
+                            Allergies:
+                            {% if p.guest_1.allergies != "" and p.guest_2.allergies != "" %}
+                                {{ p.guest_1.allergies }} | {{ p.guest_2.allergies }}
+                            {% else %}
+                                {{ p.guest_1.allergies }}{{ p.guest_2.allergies }}
+                            {% endif %}
+                            )
                         </p>
                     {% endif %}
-                </div>
-                {% if p.cook == team %}
-                <div class = "item">
-                    <p>Guests:</p>
-                </div>
-                <div class = "item mb-3">
-                    <div class = "container card1">
-                        <div class = "item dark1">
-                            <h1>Team {{ p.guest_1.name }}</h1>
-                        </div>
-                        <div class = "item">
-                            <p>{{ p.guest_1.user.email }}</p>
-                        </div>
+                    <div> <!-- Pushes content to the bottom -->
+                        {% if p.cook == team %}
+                            <div class="item">
+                                <p><i class="bi bi-people"></i> Guests:</p>
+                            </div>
+                            <div class="item mb-3">
+                                <div class="container card1">
+                                    <div class="item dark1">
+                                        <h5><i class="bi bi-person"></i> Team {{ p.guest_1.name }}</h5>
+                                    </div>
+                                    <div class="item">
+                                        <p>{{ p.guest_1.user.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="container card1">
+                                    <div class="item dark1">
+                                        <h5><i class="bi bi-person"></i> Team {{ p.guest_2.name }}</h5>
+                                    </div>
+                                    <div class="item">
+                                        <p>{{ p.guest_2.user.email }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="item">
+                                <p><i class="bi bi-house"></i> Host: Team {{ p.cook.name }}</p>
+                            </div>
+                            <div class="item">
+                                <p><i class="bi bi-envelope"></i> {{ p.cook.user.email }}</p>
+                            </div>
+                            <div class="item">
+                                <p><i class="bi bi-geo-alt"></i> Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }}<br>{{ p.cook.address_addition }}</p>
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class = "container card1">
-                        <div class = "item dark1">
-                            <h1>Team {{ p.guest_2.name }}</h1>
-                        </div>
-                        <div class = "item">
-                            <p>{{ p.guest_2.user.email }}</p>
-                        </div>
-                    </div>
+                    <div class="mt-auto"></div>
                 </div>
-                {% else %}
-
-                <div class = "item">
-                    <p>Host:</p>
-                </div>
-                <div class = "item mb-3">
-                    <div class = "container card1">
-                        <div class = "item dark1">
-                            <h1>Team {{ p.cook.name }}</h1>
-                        </div>
-                        <div class = "item">
-                            <p>{{ p.cook.user.email }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class = "item">
-                    <p>Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }}<br>{{ p.cook.address_addition }}</p>
-                </div>
-                {% endif %}
-
-                <p></p>
             </div>
-        {% endfor %}
-            
-    {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+
+
 
     <script src="{% static 'map/apikey.js' %}"></script>
     <!-- Leaflet -->
