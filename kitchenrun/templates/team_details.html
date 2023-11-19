@@ -95,8 +95,11 @@
 
     <!-- Map -->
     <div id="map{{p.course}}"></div>
-    <script> var disable_routing = true; var i = 0;</script>
-    <script> var destination = [{{ team.lat }}, {{ team.lon }}] ;</script>
+    <script> var disable_routing = true; var destination = [{{ event.lat }}, {{ event.lon }}] ;</script>
+    <script>
+        var markers = [[{{ team.lat }}, {{ team.lon }}], [{{ pair.first.guest_1.lat }}, {{ pair.first.guest_1.lon }}], [{{ pair.first.guest_2.lat }}, {{ pair.first.guest_2.lon }}]];
+        console.log(markers);
+    </script>
     <script src="{% static 'map/map.js' %}"></script>
 
 {% endblock %}

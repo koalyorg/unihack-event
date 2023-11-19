@@ -4,7 +4,11 @@ L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
 	maxZoom: 18,
 	attribution: '&copy; <a href="openstreetmap.org/copyright">OpenStreetMap</a> contributors | <a href="www.graphhopper.com">GraphHopper</a> | <a href="nominatim.org">Nomatim</a>'
 }).addTo(map);
-L.marker(destination).addTo(map);
+function addMarker(position) {
+    L.marker(position).addTo(map);
+}
+addMarker(destination);
+markers.forEach(addMarker);
 
 // Track User
 var user_location = undefined;
