@@ -49,7 +49,6 @@ def kitchenrun_signup(request, event_id):
             api_query = {"street": team.street + " " + team.number, "city": team.city, "format": "jsonv2", "accept-language": "en"}
             api_response = requests.get(api_url + api_operator, params=api_query)
             try:
-                json_rsp = api_response.json()
                 team.lat = Decimal(api_response.json()[0]['lat'])
                 team.lon = Decimal(api_response.json()[0]['lon'])
             except:
@@ -66,6 +65,7 @@ def kitchenrun_signup(request, event_id):
 @login_required
 def kitchenrun_team_details(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    event_property = get_object_or_404(EventProperty, event=event)
     team =  get_object_or_404(Team, event=event, user=request.user)
     pairing1 = Pair.objects.all().filter(cook=team)
     pairing2 = Pair.objects.all().filter(guest_1=team)
