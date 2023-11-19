@@ -2,7 +2,6 @@
 {% load bootstrap5 %}
 {% load static %}
 {% block content %}
-<script>var destination = []; var i = 0;</script>
 <br>
     <div class = ""></div>
     <div class = "container card your-team-box">
@@ -57,25 +56,27 @@
                 <div class = "item">
                     <p>Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }}<br>{{ p.cook.address_addition }}</p>
                 </div>
-            
-                <script src="{% static 'map/apikey.js' %}"></script>
-                <!-- Leaflet -->
-                <link rel="stylesheet" href="{% static 'map/leaflet/leaflet.css' %}"/>
-                <script src="{% static 'map/leaflet/leaflet.js' %}"></script>
-                <link rel="stylesheet" href="{% static 'map/map.css' %}"/>
-                <!-- Leaflet Routing Machine -->
-                <link rel="stylesheet" href="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.css' %}"/>
-                <script src="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
-                <script src="{% static 'map/lrm-graphhopper.js' %}"></script>
-    
-                <!-- Map -->
-                <div id="map{{p.course}}"></div>
-                <script> var disable_routing = true; i = {{p.course}};</script>
-                <script> destination[i] = [45.75143 + 0.01*i, 21.20822 + 0.02*i];</script>
-                <script src="{% static 'map/map.js' %}"></script>
 
                 <p></p>
             </div>
         {% endfor %}
     {% endif %}
+
+    <script src="{% static 'map/apikey.js' %}"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="{% static 'map/leaflet/leaflet.css' %}"/>
+    <script src="{% static 'map/leaflet/leaflet.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'map/map.css' %}"/>
+    <!-- Leaflet Routing Machine -->
+    <link rel="stylesheet" href="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.css' %}"/>
+    <script src="{% static 'map/leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
+    <script src="{% static 'map/lrm-graphhopper.js' %}"></script>
+
+    <!-- Map -->
+    <div id="map{{p.course}}"></div>
+    <script> var disable_routing = true; var i = 0;</script>
+    <script> var destination[i] = [45.75143, 21.20822];</script>
+    <script> var markers[i] = [];</script>
+    <script src="{% static 'map/map.js' %}"></script>
+
 {% endblock %}

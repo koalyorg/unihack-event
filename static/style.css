@@ -3,13 +3,13 @@
 }
 
 h1 {
-    font-size: 45px;
+    font-size: 28px;
     text-align: center;
     padding-top: 30px;
 }
 
 p {
-    font-size: 30px;
+    font-size: 20px;
     text-align: center;
 }
 
@@ -79,5 +79,5 @@ p {
 }
 
 .small {
-    font-size: 20px;
+    font-size: 14px;
 }
