@@ -2,26 +2,9 @@
     border: none;
 }
 
-h1 {
-    font-size: 28px;
-    text-align: center;
-    padding-top: 30px;
-}
-
-p {
-    font-size: 20px;
-    text-align: center;
-}
-
 .dark {
     background-color: #4d4d4d;
     color: #fafafa;
-}
-
-.dark1 {
-    background-color: #4d4d4d;
-    color: #fafafa;
-    padding: 0;
 }
 
 .container{
@@ -80,4 +63,16 @@ p {
 
 .small {
     font-size: 14px;
+}
+
+.float0 {
+    float: left;
+}
+
+.float1 {
+    float: center;
+}
+
+.float2 {
+    float: right;
 }
