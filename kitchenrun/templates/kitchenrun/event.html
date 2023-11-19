@@ -1,10 +1,6 @@
 <h3> Kitchen Run Details </h3>
 
-<div class="container mt-3">
     <!-- Assuming 'event' is passed in the context and it has an associated EventProperty -->
-    <div class="card">
-        <div class="card-body">
-            <p class="card-text">
                 <strong>Length of Courses:</strong> {{ event.eventproperty.length_courses }}<br>
                 <strong>Length of Breaks:</strong> {{ event.eventproperty.length_breaks }}<br>
 <!--                <strong>Team Size:</strong> {{ event.eventproperty.team_size }}<br>-->
@@ -19,13 +15,5 @@
             {% if request.user in event.participants.all %}
             <a href="{% url 'kitchenrun_team_details' event.id %}" class="btn btn-primary">Details</a>
             {% endif %}
-
-
-        </div>
-    </div>
-
-
-
-
-</div>
+<br>
 

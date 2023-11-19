@@ -2,7 +2,7 @@
 {% block content %}
 {% load bootstrap5 %}
 {% load static %}
-
+    <br>
     <h1>{{ event.title }}</h1>
     <p><strong>Type:</strong> {{ event.get_event_type_display }}</p>
     <p><strong>Start Time:</strong> {{ event.start_time|date:"DATETIME_FORMAT" }}</p>
@@ -13,6 +13,9 @@
     <p><strong>Organizer:</strong> {{ event.organizer }}</p>
     <p><strong>Participants or Teams:</strong> {{ event.participants.count }} / {{ event.max_participants }}</p>
     <p><strong>Status:</strong> {{ event.status }}</p>
+
+    <p><strong>Messages:</strong> {% for message in event.messages.all %}<li><strong>{{message.owner}}:</strong> {{message.content}}</li>{% empty %}No messages{% endfor %}</p>
+
 
     {% if event.event_type == 'KITCHENRUN' %}
         <br>
@@ -37,8 +40,8 @@
     <script src="{% static 'map/map.js' %}"></script>
     <!-- END OF MAP -->
 
+    <br>
 
-<p><strong>Messages:</strong> {% for message in event.messages.all %}<li><strong>{{message.owner}}:</strong> {{message.content}}</li>{% empty %}No messages{% endfor %}</p>
 
     <!-- Registration Button (if applicable) -->
     {% if request.user.is_authenticated and event.can_add_participant %}
@@ -78,8 +81,11 @@
     </form>
 
 
-
+<br>
+<br>
 
     {% endif %}
 {% endblock %}
 
+<br>
+<br>
