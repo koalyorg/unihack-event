@@ -2,6 +2,7 @@
 {% load bootstrap5 %}
 {% load static %}
 {% block content %}
+<script>var destination = []; var i = 0;</script>
 <br>
     <div class = ""></div>
     <div class = "container card your-team-box">
@@ -9,6 +10,7 @@
             <h1>Your Team:<br>Team {{ team.name }}</h1>
         </div>
         <div class = "item your-team">
+            <p></p>
             <p>{{ team.team_member_1 }}, {{ team.team_member_2 }}</p>
         </div>
     </div>
@@ -21,11 +23,12 @@
                     {% if p.cook == team %}
                         <p class="warning small">You are cooking this course!</p>
                         <p class = "alert small">
-                            (Allergies: None,
-                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan%}Vegan{% endif %}
-                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian%}Vegetarian{% endif %}
-                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal%}Halal{% endif %}
-                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher%}Kosher{% endif %})
+                            (
+                            {% if p.cook.is_vegan or p.guest_1.is_vegan or p.guest_2.is_vegan%}Vegan -{% endif %}
+                            {% if p.cook.is_vegetarian or p.guest_1.is_vegetarian or p.guest_2.is_vegetarian%}Vegetarian -{% endif %}
+                            {% if p.cook.is_halal or p.guest_1.is_halal or p.guest_2.is_halal%}Halal -{% endif %}
+                            {% if p.cook.is_kosher or p.guest_1.is_kosher or p.guest_2.is_kosher%}Kosher -{% endif %}
+                            Allergies: None) <!-- TODO: Allergies-->
                         </p>
                     {% endif %}
                 </div>
@@ -50,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+                <p></p> 
                 <div class = "item">
                     <p>Location: {{ p.cook.street }} {{ p.cook.number }}, {{ p.cook.city }}<br>{{ p.cook.address_addition }}</p>
                 </div>
@@ -65,15 +69,13 @@
                 <script src="{% static 'map/lrm-graphhopper.js' %}"></script>
     
                 <!-- Map -->
-                <div id="map"></div>
-                <script> var destination = [45.75143, 21.20822]; var disable_routing = true; </script>
+                <div id="map{{p.course}}"></div>
+                <script> var disable_routing = true; i = {{p.course}};</script>
+                <script> destination[i] = [45.75143 + 0.01*i, 21.20822 + 0.02*i];</script>
                 <script src="{% static 'map/map.js' %}"></script>
 
                 <p></p>
             </div>
         {% endfor %}
     {% endif %}
-
-<br>
-
 {% endblock %}

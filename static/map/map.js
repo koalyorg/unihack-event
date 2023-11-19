@@ -1,19 +1,21 @@
 // Initialize map
-var map = L.map('map').setView(destination, 14);
+var j = i;
+var map = [];
+map[j] = L.map('map' + j).setView(destination[j], 14);
 L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
 	maxZoom: 18,
 	attribution: '&copy; <a href="openstreetmap.org/copyright">OpenStreetMap</a> contributors | <a href="www.graphhopper.com">GraphHopper</a> | <a href="nominatim.org">Nomatim</a>'
-}).addTo(map);
-L.marker(destination).addTo(map);
+}).addTo(map[j]);
+L.marker(destination[j]).addTo(map[j]);
 
 // Track User
 var user_location = undefined;
 var first_tracking = true;
 function trackLocation() {
-    map.locate();
+    map[j].locate();
 }
 function onLocationFound(e) {
-    L.circleMarker(e.latlng, 10).addTo(map);
+    L.circleMarker(e.latlng, 10).addTo(map[j]);
     user_location = [e.latitude, e.longitude];
     if (first_tracking) {
         first_tracking = false;
@@ -25,8 +27,8 @@ function onLocationError(e) {
     console.log("Error" + e.message);
     setTimeout(trackLocation, 2000)
 }
-map.on('locationfound', onLocationFound);
-if (!disable_routing) { map.locate({setView: true}); }
+map[j].on('locationfound', onLocationFound);
+if (!disable_routing) { map[j].locate({setView: true}); }
 
 // Routing with Graphhopper
 // 11/18/2013: Free version has 15,000 requests per day
@@ -36,11 +38,11 @@ function calculateRoute() {
     L.Routing.control({
         waypoints: [
             L.latLng(user_location[0], user_location[1]),
-            L.latLng(destination[0], destination[1])
+            L.latLng(destination[j][0], destination[j][1])
         ],
         router: L.Routing.graphHopper(apikey, { urlParameters: {vehicle: 'foot'} }),
         autoRoute: false, // To prevent excessive use of ressources
         createMarker: function() { return null; }, // Removes default markers
         lineOptions: { styles: [{color: 'red', weight: 5}] },
-    }).addTo(map).route();
+    }).addTo(map[j]).route();
 }
