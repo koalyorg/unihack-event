@@ -54,38 +54,20 @@ def add_event(request, event_id=None):
     event = None
     if event_id:
         event = get_object_or_404(Event, id=event_id)
+    form = EventForm(instance=event)
     if request.method == 'POST':
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = request.user  # Set the event owner to the current user
-            # Get coordinates (lat, lon) from location
             if not event.is_virtual:
-                api_url = "https://nominatim.openstreetmap.org/"
-                # get lan, lon
-                api_operator = "search"
-                api_query = {"q": event.location, "format": "jsonv2", "accept-language": "en"}
-                api_response = requests.get(api_url + api_operator, params=api_query)
                 try:
-                    event.lat = Decimal(api_response.json()[0]['lat'])
-                    event.lon = Decimal(api_response.json()[0]['lon'])
+                    event.generate_geo()
                 except:
-                    messages.error(request, "City was invalid")
-                    return redirect('add_event')
-                # get town
-                api_operator = "reverse"
-                api_query = {"lat": event.lat, "lon": event.lon, "format": "jsonv2", "accept-language": "en"}
-                api_response = requests.get(api_url + api_operator, params=api_query)
-                # todo check repsonse
-                print(api_response.content)
-                try:
-                    event.city = api_response.json()["address"]['city']
-                except:
-                    event.city = api_response.json()["address"]['town']
-                # Save form if inputs are valid
-                event.save()
-            else:
-                event.save()
+                    form.add_error('location', 'Location was invalid')
+                    messages.error(request, "Location was invalid")
+                    return render(request, 'add_event.html', {'form': form})
+            event.save()
             # two step form if Kitchen Run
             if event.event_type == 'KITCHENRUN':
                 request.session['event_id'] = event.id
@@ -95,7 +77,6 @@ def add_event(request, event_id=None):
             else:
                 messages.success(request, "Event successfully created.")
             return redirect('view_index')  # Redirect to the event dashboard or other page
-    form = EventForm(instance=event)
     return render(request, 'add_event.html', {'form': form})
 
 @login_required
